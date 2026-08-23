@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.vite/
+public/assets/fonts-local/
+.pnpm-store/
+.butterfly-headless-profile/
+.agents/
+sources/
+*.bak

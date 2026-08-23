@@ -1,0 +1,2 @@
+import {spiralProjects} from './spiralProjects'
+export default function MobileFallbackList({notice}:{notice?:string}){return <section className="spiral-prototype-fallback" aria-label="作品列表">{notice&&<p className="spiral-prototype-notice">{notice}</p>}{spiralProjects.map(p=><article key={p.id}><img src={p.cover} alt={`${p.title} 项目封面`}/><p>{p.index} / 05 · {p.year}</p><h2>{p.title}</h2><span>{p.category}</span><button onClick={()=>console.log(p.slug)}>View Project →</button></article>)}</section>}

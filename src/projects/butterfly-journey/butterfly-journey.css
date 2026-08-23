@@ -1,0 +1,866 @@
+.butterfly-journey-page {
+  --wine: #39130f;
+  --wine-deep: #24100e;
+  --wine-soft: #4a1b15;
+  --cream: #f1e8d9;
+  --cream-deep: #e8dac8;
+  --gold: #d0a25b;
+  --gold-muted: #b98955;
+  --ink: #431711;
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  overflow: auto;
+  background: var(--wine);
+  color: var(--cream);
+  font-family: var(--font-body-cn);
+  scroll-behavior: smooth;
+}
+
+.butterfly-journey-page * { box-sizing: border-box; }
+.butterfly-journey-page__back {
+  position: fixed;
+  z-index: 30;
+  top: 24px;
+  left: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid rgba(243, 229, 207, .45);
+  border-radius: 999px;
+  background: rgba(82, 30, 20, .72);
+  color: #F3E5CF;
+  font: 600 15px/1 var(--font-body-cn);
+  letter-spacing: .03em;
+  cursor: pointer;
+  opacity: 1;
+  visibility: visible;
+  backdrop-filter: blur(12px);
+  transition: background .2s ease-out, border-color .2s ease-out, color .2s ease-out, transform .2s ease-out;
+}
+.butterfly-journey-page__back > span { font-size: 20px; transition: transform .2s ease-out; }
+.butterfly-journey-page__back:hover { background: rgba(102, 42, 28, .88); border-color: rgba(255, 244, 227, .72); color: #FFF4E3; transform: translateY(-1px); }
+.butterfly-journey-page__back:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+.butterfly-journey-page__hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 24px;
+  width: min(1480px, calc(100vw - 96px));
+  min-height: 118svh;
+  margin-inline: auto;
+  padding: clamp(136px, 16vh, 188px) 0 clamp(92px, 10vh, 144px);
+  overflow: visible;
+  background: radial-gradient(circle at 76% 32%, rgba(169, 69, 38, .11), transparent 35%), repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 9px), var(--wine);
+}
+.butterfly-journey-page__hero::before { content: ''; position: absolute; z-index: -1; inset: 0 calc((100vw - min(1480px, calc(100vw - 96px))) / -2); background: inherit; }
+.butterfly-journey-page__hero-copy { z-index: 4; grid-column: 1 / span 8; align-self: start; max-width: 900px; }
+.butterfly-journey-page__index,
+.butterfly-journey-page__category { display: block; margin: 0; color: var(--gold); font-size: 12px; font-weight: 700; line-height: 1.3; letter-spacing: .15em; }
+.butterfly-journey-page__category { margin-top: 20px; color: #d8bd8b; }
+.butterfly-journey-page__hero h1 { margin: 26px 0 0; color: #e9d7b4; font-family: var(--font-display-cn); font-size: clamp(78px, 8.2vw, 150px); font-weight: 400; line-height: .9; letter-spacing: .035em; white-space: nowrap; }
+.butterfly-journey-page__hero strong { display: block; margin-top: 34px; color: #dfc690; font-size: clamp(20px, 2vw, 30px); font-weight: 500; letter-spacing: .045em; }
+.butterfly-journey-page__guide { display: flex; align-items: center; flex-wrap: wrap; gap: 11px 14px; margin-top: 28px; color: rgba(238,224,199,.68); font-size: 11px; font-weight: 700; letter-spacing: .15em; }
+.butterfly-journey-page__guide i { display: block; width: clamp(120px, 15vw, 250px); height: 1px; background: rgba(217,177,111,.48); }
+.butterfly-journey-page__hero-number { position: absolute; z-index: -1; top: 11vh; right: -2.6vw; color: var(--gold); font-size: clamp(180px, 20vw, 380px); font-weight: 300; line-height: .8; opacity: .09; pointer-events: none; }
+.butterfly-journey-page__hero-visual { z-index: 3; grid-column: 7 / span 6; align-self: end; min-width: 0; margin: clamp(90px, 16vh, 180px) 0 -15vh; overflow: hidden; border: 1px solid rgba(208, 162, 91, .24); background: var(--wine-deep); box-shadow: 0 34px 80px rgba(16, 3, 2, .24); transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.butterfly-journey-page__hero-visual img { display: block; width: 100%; height: auto; object-fit: contain; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.butterfly-journey-page__hero-visual:hover { transform: scale(.995); }
+.butterfly-journey-page__hero-visual:hover img { transform: scale(1.015); }
+.butterfly-journey-page__chapter-index { position: fixed; z-index: 15; top: 50%; right: clamp(20px, 2.4vw, 48px); display: grid; gap: 14px; transform: translateY(-50%); }
+.butterfly-journey-page__chapter-index a { display: flex; align-items: center; justify-content: flex-end; gap: 10px; color: rgba(233,215,180,.32); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-decoration: none; transition: color .3s ease, opacity .3s ease; white-space: nowrap; }
+.butterfly-journey-page__chapter-index a:hover { color: rgba(233,215,180,.7); }
+.butterfly-journey-page__chapter-index i { width: 0; height: 1px; background: currentColor; transition: width .3s ease; }
+.butterfly-journey-page__chapter-index .is-active { color: var(--gold); }
+.butterfly-journey-page__chapter-index .is-active i { width: 38px; }
+
+.butterfly-journey-page__gallery { position: relative; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; row-gap: clamp(112px, 13vw, 180px); padding: clamp(180px, 22vh, 260px) max(48px, calc((100vw - 1480px) / 2)) 180px; background: var(--cream); }
+.butterfly-journey-page__gallery-item { min-width: 0; margin: 0; }
+.butterfly-journey-page__artwork-reveal { overflow: hidden; background: var(--wine-deep); transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.butterfly-journey-page__artwork-reveal img { display: block; width: 100%; height: 100%; object-fit: contain; transition: transform .45s cubic-bezier(.22,1,.36,1); }
+.butterfly-journey-page__gallery-item:hover .butterfly-journey-page__artwork-reveal { transform: scale(.995); }
+.butterfly-journey-page__gallery-item:hover .butterfly-journey-page__artwork-reveal img { transform: scale(1.015); }
+.butterfly-journey-page__gallery-item figcaption { display: grid; gap: 14px; align-content: start; }
+.butterfly-journey-page__gallery-item figcaption span,
+.butterfly-journey-page__gallery-item figcaption small { color: var(--gold-muted); font-size: 11px; font-weight: 700; letter-spacing: .15em; }
+.butterfly-journey-page__gallery-item figcaption strong { color: var(--ink); font-family: var(--font-display-cn); font-size: clamp(52px, 6vw, 100px); font-weight: 400; line-height: .95; letter-spacing: .035em; white-space: nowrap; }
+.butterfly-journey-page__gallery-item figcaption p { max-width: 560px; margin: 8px 0 0; color: rgba(67,23,17,.76); font-size: 17px; line-height: 1.82; }
+.butterfly-journey-page__gallery-item figcaption small { margin-top: 14px; color: rgba(67,23,17,.55); font-size: 10px; }
+
+/* Mode B — editorial: four columns of copy and eight columns of artwork. */
+.butterfly-journey-page__gallery-item.is-item-2 { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; align-items: center; padding-block: clamp(120px, 14vw, 180px); background: var(--cream); }
+.butterfly-journey-page__gallery-item.is-item-2 figcaption { grid-column: 1 / span 4; grid-row: 1; padding-right: 18px; }
+.butterfly-journey-page__gallery-item.is-item-2 .butterfly-journey-page__artwork-reveal { grid-column: 5 / span 8; grid-row: 1; }
+/* Mode A — full feature visual, with a restrained editorial caption. */
+.butterfly-journey-page__gallery-item.is-item-3 { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px; padding: clamp(110px, 13vw, 170px) 0; background: var(--wine); }
+.butterfly-journey-page__gallery-item.is-item-3 .butterfly-journey-page__artwork-reveal { grid-column: 1 / -1; }
+.butterfly-journey-page__gallery-item.is-item-3 figcaption { grid-column: 1 / span 5; margin-top: 24px; }
+.butterfly-journey-page__gallery-item.is-item-3 figcaption strong { color: var(--cream); }
+.butterfly-journey-page__gallery-item.is-item-3 figcaption p { color: rgba(238,224,199,.68); }
+.butterfly-journey-page__gallery-item.is-item-3 figcaption small { color: rgba(238,224,199,.55); }
+/* The page's second climax: full-height visual instead of another ordinary image row. */
+.butterfly-journey-page__gallery-item.is-item-4 { grid-column: 1 / -1; display: grid; place-items: center; min-height: 0; padding: 80px 0; background: var(--wine-deep); }
+.butterfly-journey-page__gallery-item.is-item-4 .butterfly-journey-page__artwork-reveal { width: min(100%, 1280px); max-height: 78svh; }
+.butterfly-journey-page__gallery-item.is-item-4 .butterfly-journey-page__artwork-reveal img { max-height: 78svh; }
+.butterfly-journey-page__gallery-item.is-item-4 figcaption { width: min(100%, 1280px); margin-top: 18px; }
+.butterfly-journey-page__gallery-item.is-item-4 figcaption strong { color: var(--cream); font-size: clamp(38px, 4vw, 72px); }
+.butterfly-journey-page__gallery-item.is-item-4 figcaption p { color: rgba(238,224,199,.68); }
+.butterfly-journey-page__gallery-item.is-item-4 figcaption small { color: rgba(238,224,199,.55); }
+/* Mode C — an equal, two-work comparison. */
+.butterfly-journey-page__gallery-item.is-item-5,
+.butterfly-journey-page__gallery-item.is-item-6 { grid-column: span 6; align-self: start; }
+.butterfly-journey-page__gallery-item.is-item-5 .butterfly-journey-page__artwork-reveal,
+.butterfly-journey-page__gallery-item.is-item-6 .butterfly-journey-page__artwork-reveal { aspect-ratio: 4 / 3; }
+.butterfly-journey-page__gallery-item.is-item-5 figcaption,
+.butterfly-journey-page__gallery-item.is-item-6 figcaption { margin-top: 18px; }
+.butterfly-journey-page__gallery-item.is-item-5 figcaption strong,
+.butterfly-journey-page__gallery-item.is-item-6 figcaption strong { font-size: clamp(38px, 4vw, 68px); }
+
+@media (max-width: 899px) {
+  .butterfly-journey-page__back { top: max(14px, env(safe-area-inset-top)); left: 16px; min-height: 44px; }
+  .butterfly-journey-page__hero { display: block; width: 100%; min-height: auto; padding: 110px 20px 74px; overflow: hidden; }
+  .butterfly-journey-page__hero::before { inset: 0; }
+  .butterfly-journey-page__hero-copy { max-width: none; }
+  .butterfly-journey-page__hero h1 { font-size: clamp(54px, 17vw, 82px); line-height: .94; white-space: normal; }
+  .butterfly-journey-page__hero strong { margin-top: 28px; font-size: 20px; }
+  .butterfly-journey-page__guide { margin-top: 24px; }
+  .butterfly-journey-page__hero-number,
+  .butterfly-journey-page__chapter-index { display: none; }
+  .butterfly-journey-page__hero-visual { margin: 66px 0 0; }
+  .butterfly-journey-page__gallery { display: block; padding: 0 20px 96px; background: var(--cream); }
+  .butterfly-journey-page__gallery-item,
+  .butterfly-journey-page__gallery-item.is-item-2,
+  .butterfly-journey-page__gallery-item.is-item-3,
+  .butterfly-journey-page__gallery-item.is-item-4,
+  .butterfly-journey-page__gallery-item.is-item-5,
+  .butterfly-journey-page__gallery-item.is-item-6 { display: block; min-height: auto; margin: 0 -20px; padding: 88px 20px; background: var(--cream); }
+  .butterfly-journey-page__gallery-item.is-item-3,
+  .butterfly-journey-page__gallery-item.is-item-4 { background: var(--wine); }
+  .butterfly-journey-page__gallery-item.is-item-4 .butterfly-journey-page__artwork-reveal,
+  .butterfly-journey-page__gallery-item.is-item-4 figcaption { width: 100%; max-height: none; }
+  .butterfly-journey-page__gallery-item.is-item-4 .butterfly-journey-page__artwork-reveal img { max-height: none; }
+  .butterfly-journey-page__gallery-item figcaption { margin-top: 20px; }
+  .butterfly-journey-page__gallery-item figcaption strong { font-size: clamp(42px, 13vw, 64px); white-space: normal; }
+  .butterfly-journey-page__gallery-item figcaption p { font-size: 16px; line-height: 1.75; }
+  .butterfly-journey-page__gallery-item.is-item-5 .butterfly-journey-page__artwork-reveal,
+  .butterfly-journey-page__gallery-item.is-item-6 .butterfly-journey-page__artwork-reveal { aspect-ratio: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .butterfly-journey-page { scroll-behavior: auto; }
+  .butterfly-journey-page *, .butterfly-journey-page *::before, .butterfly-journey-page *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
+}
+
+/* Continuous portfolio gallery: the artworks stay in normal document flow. */
+.butterfly-journey-page__hero {
+  min-height: 100svh;
+  padding-bottom: 64px;
+}
+
+.butterfly-journey-page__hero-visual {
+  margin: clamp(48px, 6vh, 72px) 0 0;
+}
+
+.butterfly-journey-page__gallery {
+  display: flex;
+  flex-direction: column;
+  width: min(1380px, calc(100vw - 96px));
+  margin-inline: auto;
+  padding: 64px 0 96px;
+  row-gap: 32px;
+  background: var(--cream);
+}
+
+.butterfly-journey-page__gallery-item,
+.butterfly-journey-page__gallery-item.is-item-2,
+.butterfly-journey-page__gallery-item.is-item-3,
+.butterfly-journey-page__gallery-item.is-item-4,
+.butterfly-journey-page__gallery-item.is-item-5,
+.butterfly-journey-page__gallery-item.is-item-6 {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.butterfly-journey-page__artwork-reveal,
+.butterfly-journey-page__gallery-item.is-item-4 .butterfly-journey-page__artwork-reveal {
+  width: 100%;
+  max-height: none;
+  overflow: hidden;
+  background: transparent;
+}
+
+.butterfly-journey-page__artwork-reveal img,
+.butterfly-journey-page__gallery-item.is-item-4 .butterfly-journey-page__artwork-reveal img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
+
+.butterfly-journey-page__gallery-item figcaption,
+.butterfly-journey-page__gallery-item.is-item-3 figcaption,
+.butterfly-journey-page__gallery-item.is-item-4 figcaption,
+.butterfly-journey-page__gallery-item.is-item-5 figcaption,
+.butterfly-journey-page__gallery-item.is-item-6 figcaption {
+  display: grid;
+  width: min(100%, 720px);
+  margin: 18px 0 8px;
+  gap: 8px;
+}
+
+.butterfly-journey-page__gallery-item figcaption strong,
+.butterfly-journey-page__gallery-item.is-item-3 figcaption strong,
+.butterfly-journey-page__gallery-item.is-item-4 figcaption strong,
+.butterfly-journey-page__gallery-item.is-item-5 figcaption strong,
+.butterfly-journey-page__gallery-item.is-item-6 figcaption strong {
+  color: var(--ink);
+  font-size: clamp(32px, 3.3vw, 52px);
+  line-height: 1.04;
+  white-space: normal;
+}
+
+.butterfly-journey-page__gallery-item figcaption p,
+.butterfly-journey-page__gallery-item.is-item-3 figcaption p,
+.butterfly-journey-page__gallery-item.is-item-4 figcaption p {
+  margin: 0;
+  color: rgba(67, 23, 17, .76);
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.butterfly-journey-page__gallery-item figcaption small,
+.butterfly-journey-page__gallery-item.is-item-3 figcaption small,
+.butterfly-journey-page__gallery-item.is-item-4 figcaption small {
+  margin-top: 4px;
+  color: rgba(67, 23, 17, .55);
+}
+
+@media (max-width: 899px) {
+  .butterfly-journey-page__hero {
+    min-height: auto;
+    padding-bottom: 48px;
+  }
+
+  .butterfly-journey-page__hero-visual { margin-top: 48px; }
+
+  .butterfly-journey-page__gallery {
+    display: flex;
+    width: calc(100vw - 32px);
+    margin-inline: 16px;
+    padding: 48px 0 72px;
+    row-gap: 20px;
+  }
+
+  .butterfly-journey-page__gallery-item,
+  .butterfly-journey-page__gallery-item.is-item-2,
+  .butterfly-journey-page__gallery-item.is-item-3,
+  .butterfly-journey-page__gallery-item.is-item-4,
+  .butterfly-journey-page__gallery-item.is-item-5,
+  .butterfly-journey-page__gallery-item.is-item-6 {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+  }
+
+  .butterfly-journey-page__gallery-item figcaption { margin-top: 16px; }
+}
+
+/* First work restored as a standalone image directly following the project intro. */
+.butterfly-journey-page__hero {
+  min-height: 0;
+  padding-bottom: 0;
+}
+
+.butterfly-journey-page__chapter-index {
+  position: absolute;
+}
+
+.butterfly-journey-page__first-work {
+  padding: 64px 0 32px;
+  background: var(--cream);
+}
+
+.butterfly-journey-page__first-work figure {
+  width: min(1320px, calc(100vw - 120px));
+  margin: 0 auto;
+}
+
+.butterfly-journey-page__first-work img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  cursor: default;
+}
+
+.butterfly-journey-page__gallery {
+  width: min(1320px, calc(100vw - 120px));
+  padding-top: 0;
+  row-gap: 32px;
+}
+
+.butterfly-journey-page__artwork-reveal,
+.butterfly-journey-page__artwork-reveal img {
+  cursor: default;
+}
+
+.butterfly-journey-page__hero-visual:hover,
+.butterfly-journey-page__gallery-item:hover .butterfly-journey-page__artwork-reveal,
+.butterfly-journey-page__hero-visual:hover img,
+.butterfly-journey-page__gallery-item:hover .butterfly-journey-page__artwork-reveal img {
+  transform: none;
+}
+
+@media (max-width: 899px) {
+  .butterfly-journey-page__hero { padding-bottom: 0; }
+  .butterfly-journey-page__first-work { padding: 48px 0 20px; }
+  .butterfly-journey-page__first-work figure,
+  .butterfly-journey-page__gallery { width: calc(100vw - 32px); }
+  .butterfly-journey-page__gallery { padding-top: 0; row-gap: 20px; }
+}
+
+/* Unified exhibition palette: the works remain the visual focal point. */
+.butterfly-journey-page {
+  --wine: #2b0f0b;
+  --cream: #2b0f0b;
+  --ink: #e7d3a2;
+  min-height: 100vh;
+  background:
+    repeating-linear-gradient(0deg, rgba(231, 211, 162, .025) 0 1px, transparent 1px 9px),
+    linear-gradient(128deg, #2b0f0b 0%, #3a120d 54%, #210c0a 100%);
+  color: #d8c7b0;
+}
+
+.butterfly-journey-page__hero,
+.butterfly-journey-page__visual-narrative,
+.butterfly-journey-page__first-work,
+.butterfly-journey-page__gallery {
+  background: transparent;
+}
+
+.butterfly-journey-page__hero h1,
+.butterfly-journey-page__hero-copy strong,
+.butterfly-journey-page__gallery-item figcaption strong,
+.butterfly-journey-page__first-work-copy strong,
+.butterfly-journey-page__visual-narrative h2 {
+  color: #e7d3a2;
+}
+
+.butterfly-journey-page__hero-copy strong { color: #d8c7b0; }
+
+.butterfly-journey-page__guide,
+.butterfly-journey-page__chapter-index a {
+  color: rgba(231, 211, 162, .54);
+}
+
+.butterfly-journey-page__chapter-index a.is-active {
+  color: #e7d3a2;
+}
+
+.butterfly-journey-page__visual-narrative {
+  width: min(1320px, calc(100vw - 120px));
+  margin: 0 auto;
+  padding: 56px 0 0;
+}
+
+.butterfly-journey-page__visual-narrative p,
+.butterfly-journey-page__first-work-copy > span,
+.butterfly-journey-page__gallery-item figcaption > span {
+  margin: 0;
+  color: #b8925e;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .16em;
+}
+
+.butterfly-journey-page__visual-narrative h2 {
+  max-width: 760px;
+  margin: 12px 0 16px;
+  font-size: clamp(38px, 4.5vw, 68px);
+  line-height: 1.04;
+  letter-spacing: .035em;
+}
+
+.butterfly-journey-page__visual-narrative > span {
+  display: block;
+  max-width: 710px;
+  color: #d8c7b0;
+  font-size: 17px;
+  line-height: 1.85;
+}
+
+.butterfly-journey-page__first-work {
+  padding: 40px 0 32px;
+}
+
+.butterfly-journey-page__first-work-copy {
+  display: grid;
+  width: min(1320px, calc(100vw - 120px));
+  margin: 0 auto 28px;
+  gap: 9px;
+}
+
+.butterfly-journey-page__first-work-copy strong {
+  font-size: clamp(34px, 3.6vw, 54px);
+  line-height: 1.08;
+  letter-spacing: .035em;
+}
+
+.butterfly-journey-page__first-work-copy p,
+.butterfly-journey-page__gallery-item figcaption p {
+  max-width: 720px;
+  margin: 0;
+  color: #d8c7b0;
+  font-size: 16px;
+  line-height: 1.85;
+}
+
+.butterfly-journey-page__first-work-copy small,
+.butterfly-journey-page__gallery-item figcaption small {
+  margin-top: 5px;
+  color: rgba(216, 199, 176, .68);
+  font-size: 11px;
+  letter-spacing: .11em;
+}
+
+.butterfly-journey-page__first-work figure,
+.butterfly-journey-page__gallery {
+  width: min(1320px, calc(100vw - 120px));
+}
+
+.butterfly-journey-page__first-work figure,
+.butterfly-journey-page__artwork-reveal {
+  border: 1px solid rgba(231, 211, 162, .15);
+  border-radius: 10px;
+  box-shadow: 0 22px 58px rgba(0, 0, 0, .2);
+}
+
+.butterfly-journey-page__first-work img,
+.butterfly-journey-page__artwork-reveal img {
+  border-radius: inherit;
+}
+
+.butterfly-journey-page__gallery {
+  padding: 0 0 104px;
+  row-gap: 32px;
+}
+
+.butterfly-journey-page__gallery-item figcaption {
+  margin: 18px 0 0;
+}
+
+.butterfly-journey-page__gallery-item figcaption strong {
+  font-size: clamp(32px, 3.3vw, 52px);
+  line-height: 1.08;
+  letter-spacing: .035em;
+}
+
+@media (max-width: 899px) {
+  .butterfly-journey-page__visual-narrative,
+  .butterfly-journey-page__first-work-copy,
+  .butterfly-journey-page__first-work figure,
+  .butterfly-journey-page__gallery {
+    width: calc(100vw - 32px);
+  }
+
+  .butterfly-journey-page__visual-narrative { padding-top: 44px; }
+  .butterfly-journey-page__first-work { padding-top: 32px; }
+  .butterfly-journey-page__gallery { padding-bottom: 64px; row-gap: 20px; }
+  .butterfly-journey-page__visual-narrative > span,
+  .butterfly-journey-page__first-work-copy p,
+  .butterfly-journey-page__gallery-item figcaption p { font-size: 15px; }
+}
+
+/* Stable chapter order: header, artwork, then its figure caption. */
+.butterfly-journey-page__visual-narrative {
+  max-width: 780px;
+  padding: 44px 0 72px;
+}
+
+.butterfly-journey-page__visual-narrative h2 {
+  max-width: 900px;
+  font-size: clamp(38px, 4vw, 64px);
+  line-height: 1.05;
+}
+
+.butterfly-journey-page__visual-narrative > span {
+  max-width: 780px;
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.butterfly-journey-page__first-work,
+.butterfly-journey-page__gallery-item,
+.butterfly-journey-page__gallery-item.is-item-2,
+.butterfly-journey-page__gallery-item.is-item-3,
+.butterfly-journey-page__gallery-item.is-item-4,
+.butterfly-journey-page__gallery-item.is-item-5,
+.butterfly-journey-page__gallery-item.is-item-6 {
+  display: block;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.butterfly-journey-page__first-work {
+  padding: 0 0 88px;
+}
+
+.butterfly-journey-page__first-work-copy,
+.butterfly-journey-page__gallery-item figcaption {
+  display: grid;
+  width: min(100%, 680px);
+  margin: 0 0 44px;
+  gap: 0;
+}
+
+.butterfly-journey-page__first-work-copy > span,
+.butterfly-journey-page__gallery-item figcaption > span {
+  font-size: 14px;
+  letter-spacing: .14em;
+}
+
+.butterfly-journey-page__first-work-copy strong,
+.butterfly-journey-page__gallery-item figcaption strong {
+  margin-top: 18px;
+  font-size: clamp(46px, 5vw, 76px);
+  line-height: 1;
+}
+
+.butterfly-journey-page__first-work-copy p,
+.butterfly-journey-page__gallery-item figcaption p {
+  display: block;
+  max-width: 680px;
+  margin: 26px 0 0;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.butterfly-journey-page__first-work figure,
+.butterfly-journey-page__gallery-item .butterfly-journey-page__artwork-reveal {
+  display: block;
+  width: 100%;
+  max-height: none;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.butterfly-journey-page__gallery-item .butterfly-journey-page__artwork-reveal img,
+.butterfly-journey-page__first-work figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
+
+.butterfly-journey-page__figure-caption {
+  display: block;
+  margin-top: 14px;
+  color: rgba(216, 199, 176, .48);
+  font-size: 11px;
+  letter-spacing: .12em;
+}
+
+.butterfly-journey-page__gallery {
+  display: flex;
+  flex-direction: column;
+  width: min(1320px, calc(100vw - 120px));
+  height: auto;
+  min-height: 0;
+  padding: 0 0 96px;
+  row-gap: 88px;
+}
+
+.butterfly-journey-page__gallery-item.is-item-5,
+.butterfly-journey-page__gallery-item.is-item-6 {
+  width: 100%;
+}
+
+@media (max-width: 899px) {
+  .butterfly-journey-page__visual-narrative { padding: 40px 0 56px; }
+  .butterfly-journey-page__first-work { padding-bottom: 64px; }
+  .butterfly-journey-page__first-work-copy,
+  .butterfly-journey-page__gallery-item figcaption { margin-bottom: 32px; }
+  .butterfly-journey-page__first-work-copy strong,
+  .butterfly-journey-page__gallery-item figcaption strong { font-size: clamp(42px, 10vw, 62px); }
+  .butterfly-journey-page__first-work-copy p,
+  .butterfly-journey-page__gallery-item figcaption p { font-size: 16px; }
+  .butterfly-journey-page__gallery { row-gap: 64px; }
+}
+
+/* Shared display system for the six core journey visuals. */
+.journey-figure {
+  width: min(1360px, calc(100vw - 144px));
+  margin: 0 auto;
+}
+
+.journey-figure-frame {
+  width: 100%;
+  min-height: 0;
+  max-height: none;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .08);
+  border-radius: 24px;
+  background: transparent;
+}
+
+.journey-figure-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: none;
+  object-fit: contain;
+}
+
+.butterfly-journey-page__first-work .journey-figure,
+.butterfly-journey-page__gallery-item.journey-figure {
+  width: min(1360px, calc(100vw - 144px));
+}
+
+.butterfly-journey-page__gallery {
+  width: min(1360px, calc(100vw - 144px));
+}
+
+.butterfly-journey-page__first-work-copy,
+.butterfly-journey-page__gallery-item figcaption {
+  margin-bottom: 44px;
+}
+
+.journey-figure .butterfly-journey-page__figure-caption {
+  margin-top: 14px;
+}
+
+@media (max-width: 899px) {
+  .journey-figure,
+  .butterfly-journey-page__first-work .journey-figure,
+  .butterfly-journey-page__gallery-item.journey-figure {
+    width: calc(100vw - 32px);
+  }
+}
+
+/* 02–04 use one shared reading template: a single content edge, copy system, and figure width. */
+.journey-section {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.journey-section-inner {
+  width: min(1320px, calc(100vw - 120px));
+  margin-inline: auto;
+}
+
+.journey-section .journey-section-copy {
+  display: grid;
+  width: 100%;
+  max-width: none;
+  margin: 0 0 40px;
+  padding: 0;
+  gap: 0;
+  text-align: left;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.journey-section .journey-section-copy > span {
+  margin: 0;
+  padding: 0;
+  color: #b8925e;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: .14em;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.journey-section .journey-section-copy strong {
+  display: block;
+  margin: 18px 0 0;
+  padding: 0;
+  color: #e7d3a2;
+  font-family: var(--font-display-cn);
+  font-size: clamp(46px, 5vw, 76px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: .035em;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.journey-section .journey-section-copy p {
+  display: block;
+  width: 100%;
+  max-width: 680px;
+  margin: 26px 0 0;
+  padding: 0;
+  color: #F3E5CF;
+  -webkit-text-fill-color: #F3E5CF;
+  font-size: 17px;
+  line-height: 1.8;
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.journey-section .journey-section-figure {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.journey-section .journey-figure-frame {
+  width: 100%;
+  margin-inline: auto;
+}
+
+.journey-section .journey-figure-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-inline: auto;
+  object-fit: contain;
+}
+
+.journey-section .butterfly-journey-page__figure-caption {
+  display: block;
+  margin-top: 12px;
+}
+
+@media (max-width: 899px) {
+  .journey-section-inner { width: calc(100vw - 32px); }
+  .journey-section .journey-section-copy { margin-bottom: 32px; }
+  .journey-section .journey-section-copy strong { font-size: clamp(42px, 10vw, 62px); }
+  .journey-section .journey-section-copy p { font-size: 16px; }
+}
+
+/* One alignment and contrast system for all six core chapters. */
+.journey-section-copy {
+  width: min(760px, 100%);
+  margin: 0 0 44px;
+  text-align: left;
+}
+
+.journey-section-copy > span,
+.butterfly-journey-page__visual-narrative > p {
+  color: rgba(243, 223, 176, .72);
+}
+
+.journey-section-copy strong {
+  margin-top: 18px;
+  color: #f3dfb0;
+}
+
+.journey-section-copy p,
+.butterfly-journey-page__visual-narrative > span {
+  max-width: 760px;
+  color: rgba(245, 229, 201, .88);
+  font-size: 17px;
+  line-height: 1.8;
+}
+
+.journey-figure {
+  width: min(1360px, calc(100vw - 144px));
+  margin: 0 auto;
+}
+
+.journey-figure-frame {
+  width: 100%;
+  margin-inline: auto;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.journey-figure-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-inline: auto;
+}
+
+.journey-figure .butterfly-journey-page__figure-caption {
+  margin-top: 14px;
+  color: rgba(245, 229, 201, .68);
+}
+
+@media (max-width: 899px) {
+  .journey-section-copy { width: 100%; margin-bottom: 40px; }
+  .journey-section-copy p,
+  .butterfly-journey-page__visual-narrative > span { font-size: 16px; }
+}
+
+/* Fixed 01–04 reading template: shared left edge, readable copy, centred art. */
+.journey-section-copy {
+  width: min(1320px, calc(100vw - 120px));
+  max-width: none;
+  margin: 0 auto 40px;
+  padding: 0;
+}
+
+.journey-section-copy > span { margin: 0; }
+
+.journey-section-copy strong {
+  margin-top: 16px;
+}
+
+.journey-section-copy p {
+  max-width: 760px;
+  margin: 24px 0 0;
+  color: #f6ead0;
+}
+
+.journey-figure,
+.butterfly-journey-page__first-work .journey-figure,
+.butterfly-journey-page__gallery-item.journey-figure {
+  width: min(1320px, calc(100vw - 120px));
+  margin: 0 auto;
+}
+
+.journey-figure-frame,
+.journey-figure-image {
+  margin-inline: auto;
+}
+
+.journey-figure .butterfly-journey-page__figure-caption {
+  margin-top: 12px;
+  color: #f6ead0;
+}
+
+.butterfly-journey-page__first-work {
+  padding-bottom: 96px;
+}
+
+.butterfly-journey-page__gallery {
+  width: min(1320px, calc(100vw - 120px));
+  row-gap: 96px;
+}
+
+@media (max-width: 899px) {
+  .journey-section-copy,
+  .journey-figure,
+  .butterfly-journey-page__first-work .journey-figure,
+  .butterfly-journey-page__gallery-item.journey-figure,
+  .butterfly-journey-page__gallery {
+    width: calc(100vw - 32px);
+  }
+}

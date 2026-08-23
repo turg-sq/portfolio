@@ -1,0 +1,2 @@
+import {spiralProjects} from './spiralProjects'
+export default function SpiralOverlay({index}:{index:number}){const project=spiralProjects[index];return <aside className="spiral-prototype-overlay"><nav>SPIRAL <span>/ LIST</span></nav><p className="spiral-prototype-scroll">Scroll to browse</p><div><p>{project.index} / 05</p><h1>{project.title}</h1><span>{project.category} · {project.year}</span></div></aside>}

@@ -1,0 +1,2 @@
+@font-face{font-family:"MF YueHei Project";src:url("/assets/fonts-local/ZaoZiGongFangYueHeiChangGuiTi-1.otf") format("opentype");font-style:normal;font-weight:400;font-display:swap}
+:root { --ink:#111113; --paper:#F1EFE8; --text:#171717; --paper-text:#F4F1EA; --yellow:#F3D126; --muted:#8B8B84; --line:rgba(23,23,23,.22); --font-display-cn:"MF YueHei Project","Microsoft YaHei",sans-serif; --font-body-cn:"Source Han Sans SC","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif; font-family:var(--font-body-cn); color:var(--paper-text); background:var(--ink); }

@@ -1,3 +1,4 @@
+import {AnimatePresence} from 'framer-motion'
 import {useEffect,useMemo,useState} from 'react'
 import WebGLCapabilityGate from './spiral/WebGLCapabilityGate'
 import CornerMenu from './spiral/CornerMenu'
@@ -13,6 +14,7 @@ import {spiralProjects,type SpiralProject} from './spiral/spiralProjects'
 import type {SpiralDebug} from './spiral/SpiralScene'
 import ViewSwitcher,{type ViewMode} from './spiral/ViewSwitcher'
 import ContactPage from './ContactPage'
+import VideoViewer from './spiral/VideoViewer'
 import {playUIBack,playUIClick} from '../lib/uiSound'
 
 const debugEnabled=import.meta.env.DEV&&new URLSearchParams(window.location.search).get('debug')==='1'
@@ -29,6 +31,7 @@ export default function SpiralWorksPrototype(){
   const [detailSlug,setDetailSlug]=useState<string|null>(()=>routeSlug())
   const [returnMode,setReturnMode]=useState<ViewMode>('spiral')
   const [contact,setContact]=useState<boolean>(()=>isContactRoute())
+  const [videoSrc,setVideoSrc]=useState<string|null>(null)
   const detailProject=useMemo(()=>spiralProjects.find(project=>project.slug===detailSlug)??null,[detailSlug])
   const centerCard=debug?.cards.find(card=>card.slotIndex===debug.activeSlotIndex)??null
   const opacityBands=debug?.cards.length?[1,.5,0].map(target=>debug.cards.reduce((nearest,card)=>Math.abs(card.frontness-target)<Math.abs(nearest.frontness-target)?card:nearest,debug.cards[0])):null
@@ -49,6 +52,10 @@ export default function SpiralWorksPrototype(){
 
   const openProject=(project:SpiralProject)=>{
     playUIClick()
+    if(project.destinationType==='video'){
+      setVideoSrc(project.videoSrc)
+      return
+    }
     if(project.destinationType==='external'){
       window.open(project.externalUrl,'_blank','noopener,noreferrer')
       return
@@ -95,6 +102,7 @@ export default function SpiralWorksPrototype(){
       </aside>}
     </div>
     <ProjectListView active={!isSpiral&&!isDetail} onOpenProject={openProject}/>
-    {detailProject?.id==='baby-classroom'?<BabyClassroomPage onBack={backToWorks}/>:detailProject?.id==='su-ip-design'?<SpringIpDesignPage project={detailProject} onBack={backToWorks} nextProject={nextProject} onOpenProject={openProject}/>:detailProject?.id==='butterfly-journey'?<ButterflyJourneyPage onBack={backToWorks}/>:detailProject?.id==='red-sun-duck-egg'?<RedSunDuckEggPage project={detailProject} onBack={backToWorks} nextProject={nextProject} onOpenProject={openProject}/>:detailProject?.id==='ae-live-gift'?<AELiveGiftPage onBack={backToWorks} nextProject={nextProject} onOpenProject={openProject}/>:detailProject&&<ProjectDetail project={detailProject} nextProject={nextProject} onBack={backToWorks} onOpenProject={openProject}/>}
+    {detailProject?.id==='baby-classroom'?<BabyClassroomPage onBack={backToWorks}/>:detailProject?.id==='su-ip-design'?<SpringIpDesignPage project={detailProject} onBack={backToWorks} nextProject={nextProject} onOpenProject={openProject}/>:detailProject?.id==='butterfly-journey'?<ButterflyJourneyPage onBack={backToWorks}/>:detailProject?.id==='red-sun-duck-egg'?<RedSunDuckEggPage project={detailProject} onBack={backToWorks} nextProject={nextProject} onOpenProject={openProject}/>:detailProject?.id==='ae-live-gift'?<AELiveGiftPage onBack={backToWorks} nextProject={nextProject} onOpenProject={openProject}/>:detailProject&&<ProjectDetail project={detailProject} nextProject={nextProject} onBack={backToWorks} onOpenProject={openProject}/>} 
+    <AnimatePresence>{videoSrc&&<VideoViewer src={videoSrc} onClose={()=>setVideoSrc(null)}/>}</AnimatePresence>
   </main>
 }

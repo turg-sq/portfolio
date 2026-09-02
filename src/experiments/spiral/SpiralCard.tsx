@@ -1,6 +1,6 @@
 import {useTexture} from '@react-three/drei'
 import {useFrame,useThree} from '@react-three/fiber'
-import {useEffect,useLayoutEffect,useMemo,useRef} from 'react'
+import {useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react'
 import * as THREE from 'three'
 import {createCurvedPlaneGeometry,createGlassStripeTexture,createMosaicTexture,setCurvedPlaneBend} from './curvedCard'
 import {getCardState,helix} from './helix'
@@ -21,6 +21,7 @@ export default function SpiralCard({slot,getPhase,getActiveSlot,getHoverEligible
   const frontMesh=useRef<THREE.Mesh>(null)
   const backMesh=useRef<THREE.Mesh>(null)
   const front=useRef<THREE.MeshBasicMaterial>(null)
+  const frontVideo=useRef<THREE.MeshBasicMaterial>(null)
   const back=useRef<THREE.MeshBasicMaterial>(null)
   const initialized=useRef(false)
   const baseArc=.12
@@ -42,9 +43,25 @@ export default function SpiralCard({slot,getPhase,getActiveSlot,getHoverEligible
   const currentImageZoom=useRef(1)
   const cardMountId=useRef(`spiral-card-${slot.slotIndex}`)
   const pointerStart=useRef<{x:number;y:number}|null>(null)
+  const [videoReady,setVideoReady]=useState(false)
+  const coverVideoElement=useMemo(()=>{
+    if(!slot.coverVideo||typeof document==='undefined')return null
+    const video=document.createElement('video')
+    video.src=slot.coverVideo
+    video.poster=slot.cover
+    video.muted=true
+    video.loop=true
+    video.autoplay=true
+    video.playsInline=true
+    video.preload='metadata'
+    return video
+  },[slot.coverVideo])
+  const coverVideoTexture=useMemo(()=>coverVideoElement?new THREE.VideoTexture(coverVideoElement):null,[coverVideoElement])
+  const videoOpacity=useRef(0)
 
   useEffect(()=>{texture.colorSpace=THREE.SRGBColorSpace;texture.magFilter=THREE.LinearFilter;texture.minFilter=THREE.LinearMipmapLinearFilter;texture.generateMipmaps=true;texture.wrapS=THREE.ClampToEdgeWrapping;texture.wrapT=THREE.ClampToEdgeWrapping;texture.anisotropy=Math.min(8,gl.capabilities.getMaxAnisotropy());texture.needsUpdate=true},[gl,texture])
   useEffect(()=>{frontTexture.colorSpace=THREE.SRGBColorSpace;frontTexture.magFilter=THREE.LinearFilter;frontTexture.minFilter=THREE.LinearMipmapLinearFilter;frontTexture.generateMipmaps=true;frontTexture.wrapS=THREE.ClampToEdgeWrapping;frontTexture.wrapT=THREE.ClampToEdgeWrapping;frontTexture.anisotropy=Math.min(8,gl.capabilities.getMaxAnisotropy());frontTexture.needsUpdate=true},[frontTexture,gl])
+  useEffect(()=>{if(!coverVideoElement||!coverVideoTexture)return;const fitToCard=()=>{const sourceRatio=coverVideoElement.videoWidth/coverVideoElement.videoHeight;if(!sourceRatio)return;const cardRatio=slot.aspectRatio;if(sourceRatio>cardRatio){const repeat=cardRatio/sourceRatio;coverVideoTexture.repeat.set(repeat,1);coverVideoTexture.offset.set((1-repeat)*.5,0)}else{const repeat=sourceRatio/cardRatio;coverVideoTexture.repeat.set(1,repeat);coverVideoTexture.offset.set(0,(1-repeat)*.5)}coverVideoTexture.colorSpace=THREE.SRGBColorSpace;coverVideoTexture.needsUpdate=true};const ready=()=>{fitToCard();setVideoReady(true);coverVideoElement.play().catch(()=>setVideoReady(false))};const failed=()=>setVideoReady(false);coverVideoElement.addEventListener('loadeddata',ready);coverVideoElement.addEventListener('canplay',ready);coverVideoElement.addEventListener('error',failed);coverVideoElement.load();return()=>{coverVideoElement.removeEventListener('loadeddata',ready);coverVideoElement.removeEventListener('canplay',ready);coverVideoElement.removeEventListener('error',failed);coverVideoElement.pause();coverVideoElement.removeAttribute('src');coverVideoElement.load();coverVideoTexture.dispose()}},[coverVideoElement,coverVideoTexture,slot.aspectRatio])
   useEffect(()=>{mosaic.wrapS=THREE.RepeatWrapping;mosaic.repeat.x=-1;mosaic.offset.x=1;mosaic.needsUpdate=true},[mosaic])
   useEffect(()=>()=>{geometry.dispose();mask.dispose();mosaic.dispose();glassStripes.dispose();frontTexture.dispose()},[geometry,mask,mosaic,glassStripes,frontTexture])
   const apply=(card:ReturnType<typeof getCardState>,scale=card.scale)=>{if(group.current){group.current.position.copy(card.position);group.current.rotation.copy(card.rotation);group.current.scale.setScalar(scale)}if(front.current)front.current.opacity=1;if(back.current)back.current.opacity=1}
@@ -104,6 +121,7 @@ export default function SpiralCard({slot,getPhase,getActiveSlot,getHoverEligible
     const finalArcSigned=arcMagnitude*-horizontalSide
     if(Math.abs(finalArcSigned-lastArc.current)>.0005){setCurvedPlaneBend(geometry,helix.cardWidth,finalArcSigned,localCylinderRadius);lastArc.current=finalArcSigned}
     if(front.current)front.current.opacity=1
+    if(frontVideo.current){videoOpacity.current=THREE.MathUtils.damp(videoOpacity.current,videoReady?1:0,12,delta);frontVideo.current.opacity=videoOpacity.current}
     if(back.current){back.current.opacity=1;back.current.color.setScalar(.86)}
     currentBrightness.current=THREE.MathUtils.damp(currentBrightness.current,targetBrightness,8,delta)
     if(front.current)front.current.color.setScalar(currentBrightness.current)
@@ -118,6 +136,7 @@ export default function SpiralCard({slot,getPhase,getActiveSlot,getHoverEligible
   return <group ref={group} position={initial.position} rotation={initial.rotation} scale={initial.scale} onPointerEnter={event=>{event.stopPropagation();setHoveredSlot(slot.slotIndex);if(getHoverEligibleSlots().includes(slot.slotIndex))document.body.style.cursor='pointer'}} onPointerLeave={()=>{if(getHoveredSlot()===slot.slotIndex)setHoveredSlot(null);pointerStart.current=null;document.body.style.cursor=''}} onPointerDown={event=>{event.stopPropagation();pointerStart.current={x:event.clientX,y:event.clientY}}} onPointerUp={event=>{event.stopPropagation();const start=pointerStart.current;pointerStart.current=null;if(slot.projectIndex===null||!start)return;if(Math.hypot(event.clientX-start.x,event.clientY-start.y)<=6)onOpenProject(slot.projectIndex)}}>
     <group ref={visualContainer} scale={CARD_VISUAL_SCALE}>
       <mesh ref={frontMesh} geometry={geometry} frustumCulled={false}><meshBasicMaterial ref={front} map={frontTexture} alphaMap={mask} transparent opacity={1} depthWrite depthTest toneMapped={false} side={THREE.FrontSide}/></mesh>
+      {coverVideoTexture&&<mesh geometry={geometry} position={[0,0,.002]} renderOrder={1} frustumCulled={false}><meshBasicMaterial ref={frontVideo} map={coverVideoTexture} alphaMap={mask} transparent opacity={0} depthWrite={false} depthTest toneMapped={false} side={THREE.FrontSide}/></mesh>}
       <mesh ref={backMesh} geometry={geometry} frustumCulled={false}><meshBasicMaterial ref={back} map={mosaic} alphaMap={mask} transparent opacity={1} depthWrite depthTest toneMapped={false} side={THREE.BackSide}/></mesh>
       <mesh geometry={geometry} renderOrder={2}><meshBasicMaterial map={glassStripes} alphaMap={mask} transparent opacity={.08} depthWrite={false} toneMapped={false} side={THREE.BackSide}/></mesh>
     </group>

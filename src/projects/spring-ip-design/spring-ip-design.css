@@ -14,6 +14,7 @@
 .spring-ip-hero__slide{width:100%;height:100%;display:block}
 .spring-ip-hero__slide::after{content:'';position:absolute;z-index:3;inset:0;background-image:radial-gradient(circle,rgba(50,55,55,.5) 1.7px,transparent 1.8px);background-size:11px 11px;pointer-events:none}
 .spring-ip-hero__background{position:absolute!important;z-index:0;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;margin:0!important;padding:0!important;border-radius:0!important;object-fit:cover!important;object-position:center center;filter:none!important;transform-origin:center center}
+.spring-ip-hero__background-media{overflow:hidden}.spring-ip-hero__background-media>img,.spring-ip-hero__background-media>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}.spring-ip-hero__background-media>video{z-index:1;opacity:0;transition:opacity .28s ease-out}.spring-ip-hero__background-media>video.is-ready{opacity:1}
 .spring-ip-hero__slide.is-keyvisual{display:block;padding:0;background:#163d70}
 .spring-ip-hero__slide.is-keyvisual .spring-ip-hero__background{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;filter:none!important}
 .spring-ip-hero__blue{z-index:0;background:linear-gradient(180deg,#4eb1df 0%,#318fc9 48%,#174d7a 100%)}
@@ -236,6 +237,23 @@
   .spring-ip-h5__phone.is-secondary { width: 320px; height: 460px; }
   .spring-ip-h5__phone-art.is-primary { inset: 0; width: 100%; height: 100%; background-size: 970px auto !important; background-position: -370px -90px !important; }
   .spring-ip-h5__phone-art.is-secondary { inset: 0; width: 100%; height: 100%; background-size: 945px auto !important; background-position: -565px -145px !important; }
+}
+
+/* Summary: retain the copy/artwork relationship while grouping the details and flash installation on the right. */
+.spring-ip-summary__metadata { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
+.spring-ip-summary .spring-ip-summary__metadata-list { display: grid; gap: 22px; width: 100%; margin: 0; padding-top: 0; }
+.spring-ip-summary__metadata-list > div { padding-top: 14px; border-top: 1px solid rgba(23,35,33,.18); }
+.spring-ip-summary__metadata-list dt { color: #58725c; font-size: 11px; font-weight: 700; letter-spacing: .13em; }
+.spring-ip-summary__metadata-list dd { margin: 7px 0 0; font-size: 15px; line-height: 1.55; }
+.spring-ip-summary__flash-installation { width: 100%; margin: 0; }
+.spring-ip-summary__flash-installation img { display: block; width: 100%; height: auto; object-fit: contain; }
+
+@media (min-width: 1024px) {
+  .spring-ip-summary .spring-ip-summary__metadata { grid-column: 8 / span 5; grid-row: 2; width: min(100%, 420px); margin: 0; padding-top: 0; align-self: start; justify-self: start; }
+}
+
+@media (max-width: 899px) {
+  .spring-ip-summary .spring-ip-summary__metadata { width: min(100%, 520px); }
 }
 
 /* Final three-point refinement: shared cream ground, edge-to-edge motion, and a fuller campaign board. */

@@ -71,6 +71,11 @@
 .butterfly-journey-page__hero-visual img { display: block; width: 100%; height: auto; object-fit: contain; transition: transform .45s cubic-bezier(.22,1,.36,1); }
 .butterfly-journey-page__hero-visual:hover { transform: scale(.995); }
 .butterfly-journey-page__hero-visual:hover img { transform: scale(1.015); }
+.butterfly-journey-page__hero-butterfly-layer { position: fixed; z-index: 14; inset: 0; width: 100vw; height: 100dvh; overflow: hidden; pointer-events: none; }
+.butterfly-journey-page__hero-butterfly { position: absolute; left: 73%; top: 30%; width: clamp(96px, 9vw, 148px); will-change: left, top, transform; filter: drop-shadow(0 14px 16px rgba(14, 4, 2, .3)); }
+.butterfly-journey-page__hero-butterfly img { display: block; width: 100%; height: auto; transform-origin: 52% 50%; will-change: transform; }
+.butterfly-journey-page__hero-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.butterfly-journey-page__hero-particles span { position: absolute; display: block; border-radius: 999px; background: radial-gradient(circle at 35% 35%, #fff7d1 0 15%, #efd080 36%, rgba(209, 150, 61, .1) 72%); box-shadow: 0 0 8px rgba(232, 185, 91, .7); will-change: transform, opacity; }
 .butterfly-journey-page__chapter-index { position: fixed; z-index: 15; top: 50%; right: clamp(20px, 2.4vw, 48px); display: grid; gap: 14px; transform: translateY(-50%); }
 .butterfly-journey-page__chapter-index a { display: flex; align-items: center; justify-content: flex-end; gap: 10px; color: rgba(233,215,180,.32); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-decoration: none; transition: color .3s ease, opacity .3s ease; white-space: nowrap; }
 .butterfly-journey-page__chapter-index a:hover { color: rgba(233,215,180,.7); }
@@ -131,6 +136,7 @@
   .butterfly-journey-page__hero-number,
   .butterfly-journey-page__chapter-index { display: none; }
   .butterfly-journey-page__hero-visual { margin: 66px 0 0; }
+  .butterfly-journey-page__hero-butterfly { width: 104px; }
   .butterfly-journey-page__gallery { display: block; padding: 0 20px 96px; background: var(--cream); }
   .butterfly-journey-page__gallery-item,
   .butterfly-journey-page__gallery-item.is-item-2,

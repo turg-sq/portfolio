@@ -24,6 +24,17 @@ function ImageReveal({ src, alt, className = '', delay = 0 }: { src: string; alt
   return <motion.figure className={`spring-ip-image ${className}`} initial={reduced ? false : { opacity: 0, y: 36, scale: .99 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: true, amount: .14 }} transition={{ duration: .62, delay, ease }}><img src={asset(src)} alt={alt} loading="lazy" decoding="async" /></motion.figure>
 }
 
+function HeroBackground({ image, alt, active, reduced }: { image: string; alt: string; active: boolean; reduced: boolean | null }) {
+  const [videoReady, setVideoReady] = useState(false)
+  const isGardenVideo = image === 'hero-garden.png'
+  const poster = asset(image)
+
+  return <motion.div className="spring-ip-hero__background spring-ip-hero__background-media" initial={false} animate={{ scale: active ? 1 : 1.025 }} transition={reduced ? { duration: 0 } : { duration: .7, ease }}>
+    <img src={poster} alt={alt} />
+    {isGardenVideo && <video className={videoReady ? 'is-ready' : ''} autoPlay muted loop playsInline preload="metadata" poster={poster} onLoadedData={() => setVideoReady(true)} onCanPlay={() => setVideoReady(true)} onError={() => setVideoReady(false)} aria-hidden="true"><source src={asset('hero-garden.mp4')} type="video/mp4" /></video>}
+  </motion.div>
+}
+
 function SummaryArtwork() {
   const reduced = useReducedMotion()
   return <motion.div className="spring-ip-summary__artwork" initial={reduced ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .16 }} transition={{ duration: .6, ease }}><p className="spring-ip-summary__caption">CHARACTER → CAMPAIGN → DIGITAL EXPERIENCE</p><figure className="spring-ip-image spring-ip-summary__visual"><img src={asset('spring-campaign-board.png')} alt="踏春去趣野不设限春游活动视觉板" loading="lazy" decoding="async" /></figure></motion.div>
@@ -32,7 +43,7 @@ function SummaryArtwork() {
 function SummaryMetadata() {
   const reduced = useReducedMotion()
   const itemTransition = (delay: number) => ({ duration: .46, delay, ease })
-  return <dl className="spring-ip-summary__metadata"><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(0)}><dt>TYPE</dt><dd>IP DESIGN</dd></motion.div><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(.075)}><dt>YEAR</dt><dd>2026</dd></motion.div><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(.15)}><dt>ROLE</dt><dd>IP视觉 / 活动视觉 / H5设计</dd></motion.div><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(.225)}><dt>TOOLS</dt><dd>Illustrator / Photoshop / After Effects</dd></motion.div></dl>
+  return <aside className="spring-ip-summary__metadata"><dl className="spring-ip-summary__metadata-list"><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(0)}><dt>TYPE</dt><dd>IP DESIGN</dd></motion.div><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(.075)}><dt>YEAR</dt><dd>2026</dd></motion.div><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(.15)}><dt>ROLE</dt><dd>IP视觉 / 活动视觉 / H5设计</dd></motion.div><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(.225)}><dt>TOOLS</dt><dd>Illustrator / Photoshop / After Effects</dd></motion.div></dl><motion.figure className="spring-ip-summary__flash-installation" initial={reduced ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .16 }} transition={{ duration: .56, delay: .24, ease }}><img src={asset('flash-installation.png')} alt="踏春去趣野不设限快闪平面图" loading="lazy" decoding="async" /></motion.figure></aside>
 }
 
 function ScrollNarrative() {
@@ -58,7 +69,7 @@ function H5VisualGroup() {
 
 export default function SpringIpDesignPage({ nextProject, onBack, onOpenProject }: Props) {
   const reduced = useReducedMotion()
-  const [slide, setSlide] = useState(0)
+  const [slide, setSlide] = useState(1)
   const [heroHovered, setHeroHovered] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
 
@@ -74,7 +85,7 @@ export default function SpringIpDesignPage({ nextProject, onBack, onOpenProject 
     <button className="spring-ip-page__back" type="button" onClick={onBack}><span aria-hidden="true">←</span> 返回作品</button>
     <section ref={heroRef} className="spring-ip-hero" aria-label="踏青春游 IP 视觉轮播" onPointerEnter={() => setHeroHovered(true)} onPointerLeave={() => setHeroHovered(false)}>
       {slides.map((item, index) => <motion.article key={item.eyebrow} className={`spring-ip-hero__slide is-${item.kind}${item.variant ? ` is-${item.variant}` : ''}`} initial={false} animate={{ opacity: index === slide ? 1 : 0 }} transition={reduced ? { duration: 0 } : { duration: .7, ease }} aria-hidden={index !== slide}>
-        <motion.img className="spring-ip-hero__background" src={asset(item.image)} alt={index === 0 ? '踏春去趣野不设限春游主视觉' : index === 1 ? '普罗小番茄花园场景' : '普罗小番茄春日场景'} initial={false} animate={{ scale: index === slide ? 1 : 1.025 }} transition={reduced ? { duration: 0 } : { duration: .7, ease }} />
+        <HeroBackground image={item.image} alt={index === 0 ? '踏春去趣野不设限春游主视觉' : index === 1 ? '普罗小番茄花园场景' : '普罗小番茄春日场景'} active={index === slide} reduced={reduced} />
         <div className="spring-ip-hero__shade" />
         {item.centerMark && <strong className="spring-ip-hero__center-mark">{item.centerMark}</strong>}
         <div className="spring-ip-hero__copy"><p>{item.eyebrow}<br />{item.year}</p>{item.title && <h1>{item.title.split('\n').map(line => <span key={line}>{line}</span>)}</h1>}{item.copy && <strong>{item.copy}</strong>}</div>

@@ -4,7 +4,7 @@ import AutoVideo from '../components/AutoVideo'
 import MediaPreview from '../components/MediaPreview'
 const videos = [
   { index: '01 / HOME EXPERIENCE', title: '首页反馈动效', description: '通过轻量页面反馈强化进入学习后的状态感知。', src: 'motion-home.gif' },
-  { index: '02 / QUIZ FEEDBACK', title: '答题反馈动效', description: '以明确的结果反馈帮助儿童理解当前任务状态。', src: 'motion-feedback.gif' },
+  { index: '02 / QUIZ FEEDBACK', title: '答题反馈动效', description: '以明确的结果反馈帮助儿童理解当前任务状态。', src: 'motion-map.gif' },
 ]
 const ease = [0.2, 0, 0, 1] as const
 

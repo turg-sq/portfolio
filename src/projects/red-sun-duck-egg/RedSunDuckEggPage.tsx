@@ -1,4 +1,4 @@
-import {useEffect,useRef} from 'react'
+import {useEffect,useRef,useState} from 'react'
 import {motion,useReducedMotion} from 'framer-motion'
 import type {SpiralProject} from '../../experiments/spiral/spiralProjects'
 import './red-sun-duck-egg.css'
@@ -22,6 +22,17 @@ function RevealImage({src,alt,className='',delay=0,half=false}:{src:string;alt:s
   </motion.figure>
 }
 
+function HeroBackdrop(){
+  const [videoReady,setVideoReady]=useState(false)
+  const poster=asset('product-scene.png')
+  return <div className="red-sun-hero__media" aria-hidden="true">
+    <img className="red-sun-hero__backdrop" src={poster} alt="" />
+    <video className={`red-sun-hero__backdrop-video${videoReady?' is-ready':''}`} autoPlay muted loop playsInline preload="metadata" poster={poster} onLoadedData={()=>setVideoReady(true)} onCanPlay={()=>setVideoReady(true)} onError={()=>setVideoReady(false)}>
+      <source src={asset('shot_01.mp4')} type="video/mp4" />
+    </video>
+  </div>
+}
+
 export default function RedSunDuckEggPage({project,nextProject,onBack,onOpenProject}:RedSunDuckEggPageProps){
   const reducedMotion=useReducedMotion()
   const heroRef=useRef<HTMLElement>(null)
@@ -36,7 +47,7 @@ export default function RedSunDuckEggPage({project,nextProject,onBack,onOpenProj
     <button className="red-sun-page__back" type="button" onClick={onBack}><span aria-hidden="true">←</span> 返回作品</button>
 
     <section ref={heroRef} className="red-sun-hero" aria-labelledby="red-sun-title">
-      <img className="red-sun-hero__backdrop" src={asset('product-scene.png')} alt="" aria-hidden="true" />
+      <HeroBackdrop />
       <div className="red-sun-hero__overlay" aria-hidden="true" />
       <nav className="red-sun-hero__nav" aria-label="项目内导航">
         <button className="is-active" type="button" onClick={()=>scrollToSection('.red-sun-brand-story')}>品牌故事</button>
@@ -116,7 +127,7 @@ export default function RedSunDuckEggPage({project,nextProject,onBack,onOpenProj
 
     <section className="red-sun-identity red-sun-section">
       <SectionHeading index="06" english="BRAND IDENTITY" title="品牌识别" />
-      <div className="brand-identity-content red-sun-identity__grid red-sun-grid"><RevealImage src="brand-logo.png" alt="红太阳咸鸭蛋品牌标志展示" className="brand-identity-visual" /><motion.div className="brand-identity-copy" initial={reducedMotion?false:{opacity:0,y:16}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.18}} transition={{duration:.54,ease}}><p className="brand-identity-copy__eyebrow">01 / LOGO SYSTEM</p><h3>标志设计</h3><p>标志以太阳、水域和蛋黄形态建立关联，通过红色与橙色形成品牌识别，并与包装中的鸭、芦苇和水纹元素保持一致。</p></motion.div><div className="red-sun-identity__index" aria-label="品牌系统索引"><span>SYMBOL</span><span>COLOR</span><span>PATTERN</span><span>TYPE</span></div><div className="red-sun-identity__brand-system"><div className="red-sun-identity__brand-copy"><p>02 / BRAND SYSTEM</p><h3>视觉延展</h3><p>围绕红太阳品牌标志、米白与砖红色彩及水域纹样建立统一视觉语言，使标志、包装与应用场景保持一致的品牌识别。</p></div><RevealImage src="brand-story.png" alt="红太阳咸鸭蛋品牌视觉故事" className="brand-identity-story-image" /></div></div>
+      <div className="brand-identity-content red-sun-identity__grid red-sun-grid"><RevealImage src="brand-logo.png" alt="红太阳咸鸭蛋品牌标志展示" className="brand-identity-visual" /><motion.div className="brand-identity-copy" initial={reducedMotion?false:{opacity:0,y:16}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.18}} transition={{duration:.54,ease}}><p className="brand-identity-copy__eyebrow">01 / LOGO SYSTEM</p><h3>标志设计</h3><p>标志以太阳、水域和蛋黄形态建立关联，通过红色与橙色形成品牌识别，并与包装中的鸭、芦苇和水纹元素保持一致。</p></motion.div><div className="red-sun-identity__index" aria-label="品牌系统索引"><span>SYMBOL</span><span>COLOR</span><span>PATTERN</span><span>TYPE</span></div><div className="red-sun-identity__brand-system"><div className="red-sun-identity__brand-copy"><p>02 / BRAND SYSTEM</p><h3>视觉延展</h3><p>围绕红太阳品牌标志、米白与砖红色彩及水域纹样建立统一视觉语言，使标志、包装与应用场景保持一致的品牌识别。</p></div><div className="red-sun-identity__brand-system-display"><RevealImage src="brand-story.png" alt="红太阳咸鸭蛋品牌视觉故事" className="brand-identity-story-image" /><RevealImage src="flash-installation.png" alt="快闪平面图" className="brand-identity-flash-image" /></div></div></div>
     </section>
 
     <section className="red-sun-application red-sun-section">

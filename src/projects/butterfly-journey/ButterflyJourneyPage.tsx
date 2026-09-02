@@ -95,6 +95,169 @@ type JourneySectionProps = {
   caption: string
 }
 
+type TrailParticle = {
+  node: HTMLSpanElement
+  bornAt: number
+  lifetime: number
+  x: number
+  y: number
+  driftX: number
+  driftY: number
+}
+
+function ButterflyEffectLayer({ reducedMotion }: { reducedMotion: boolean | null }) {
+  const butterflyRef = useRef<HTMLDivElement>(null)
+  const artRef = useRef<HTMLImageElement>(null)
+  const particleLayerRef = useRef<HTMLDivElement>(null)
+  const trailRef = useRef<TrailParticle[]>([])
+
+  useEffect(() => {
+    const butterfly = butterflyRef.current
+    const art = artRef.current
+    const particleLayer = particleLayerRef.current
+    if (!butterfly || !art || !particleLayer) return
+
+    const supportsPointerFollow = !reducedMotion && window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    const target = { x: 0, y: 0 }
+    const current = { x: 0, y: 0, lastX: 0, lastY: 0, initialized: false }
+    let pointerInside = false
+    let frame = 0
+    let nextParticleAt = 0
+    let rotation = 0
+
+    const idlePosition = () => ({ x: window.innerWidth * .76, y: window.innerHeight * .24 })
+    const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
+
+    const setTargetToIdle = () => {
+      const idle = idlePosition()
+      target.x = idle.x
+      target.y = idle.y
+    }
+
+    const handlePointerMove = (event: PointerEvent) => {
+      if (!supportsPointerFollow) return
+      target.x = clamp(event.clientX + 34, 54, window.innerWidth - 54)
+      target.y = clamp(event.clientY - 34, 54, window.innerHeight - 54)
+      pointerInside = true
+    }
+
+    const handlePointerLeave = () => {
+      pointerInside = false
+      setTargetToIdle()
+    }
+
+    const setStaticPosition = () => {
+      const idle = idlePosition()
+      butterfly.style.left = `${idle.x}px`
+      butterfly.style.top = `${idle.y}px`
+      butterfly.style.transform = 'translate3d(-50%, -50%, 0)'
+      art.style.transform = 'rotate(2deg) scale(1)'
+    }
+
+    if (reducedMotion) {
+      setStaticPosition()
+      return
+    }
+
+    const emitParticle = (now: number, x: number, y: number, vx: number, vy: number) => {
+      if (trailRef.current.length >= 24) {
+        trailRef.current.shift()?.node.remove()
+      }
+      const node = document.createElement('span')
+      const size = 2 + Math.random() * 3
+      node.style.width = `${size}px`
+      node.style.height = `${size}px`
+      particleLayer.appendChild(node)
+      trailRef.current.push({
+        node,
+        bornAt: now,
+        lifetime: 760 + Math.random() * 620,
+        x: x - vx * (7 + Math.random() * 8) + (Math.random() - .5) * 14,
+        y: y - vy * (7 + Math.random() * 8) + (Math.random() - .5) * 14,
+        driftX: (Math.random() - .5) * .025,
+        driftY: -.012 - Math.random() * .02,
+      })
+    }
+
+    const tick = (now: number) => {
+      if (!current.initialized) {
+        const idle = idlePosition()
+        current.x = idle.x
+        current.y = idle.y
+        current.lastX = idle.x
+        current.lastY = idle.y
+        target.x = idle.x
+        target.y = idle.y
+        current.initialized = true
+      }
+      if (!pointerInside) setTargetToIdle()
+
+      current.lastX = current.x
+      current.lastY = current.y
+      const followStrength = supportsPointerFollow && pointerInside ? .04 : .018
+      current.x += (target.x - current.x) * followStrength
+      current.y += (target.y - current.y) * followStrength
+
+      const velocityX = current.x - current.lastX
+      const velocityY = current.y - current.lastY
+      const tiltTarget = clamp(velocityX * .92, -8, 8)
+      rotation += (tiltTarget - rotation) * .12
+      const speed = Math.min(Math.hypot(velocityX, velocityY), 7)
+      const time = now * .001
+      const floatX = Math.cos(time * 1.1) * 3
+      const floatY = Math.sin(time * 1.5) * 5
+      const wing = Math.sin(now * .014) * 1.6
+      const wingScale = 1 + Math.sin(now * .014) * .012
+
+      butterfly.style.left = `${current.x}px`
+      butterfly.style.top = `${current.y}px`
+      butterfly.style.transform = `translate3d(-50%, -50%, 0) translate3d(${floatX}px, ${floatY}px, 0) rotate(${rotation}deg)`
+      art.style.transform = `rotate(${wing}deg) scale(${1 + speed * .004}, ${wingScale})`
+
+      if (supportsPointerFollow && pointerInside && speed > .08 && now >= nextParticleAt) {
+        emitParticle(now, current.x + floatX, current.y + floatY, velocityX, velocityY)
+        nextParticleAt = now + (speed > .35 ? 78 : 130)
+      }
+
+      trailRef.current = trailRef.current.filter((particle) => {
+        const progress = (now - particle.bornAt) / particle.lifetime
+        if (progress >= 1) {
+          particle.node.remove()
+          return false
+        }
+        const age = now - particle.bornAt
+        particle.node.style.opacity = `${(1 - progress) * .72}`
+        particle.node.style.transform = `translate3d(${particle.x + particle.driftX * age}px, ${particle.y + particle.driftY * age}px, 0) scale(${1 - progress * .45})`
+        return true
+      })
+
+      frame = window.requestAnimationFrame(tick)
+    }
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: true })
+    window.addEventListener('pointerleave', handlePointerLeave)
+    window.addEventListener('mouseleave', handlePointerLeave)
+    window.addEventListener('blur', handlePointerLeave)
+    frame = window.requestAnimationFrame(tick)
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerleave', handlePointerLeave)
+      window.removeEventListener('mouseleave', handlePointerLeave)
+      window.removeEventListener('blur', handlePointerLeave)
+      trailRef.current.forEach(({ node }) => node.remove())
+      trailRef.current = []
+    }
+  }, [reducedMotion])
+
+  return <div className="butterfly-journey-page__hero-butterfly-layer" aria-hidden="true">
+    <div className="butterfly-journey-page__hero-butterfly" ref={butterflyRef}>
+      <img ref={artRef} src="/assets/projects/butterfly-journey/hero-butterfly.png" alt="" />
+    </div>
+    <div className="butterfly-journey-page__hero-particles" ref={particleLayerRef} />
+  </div>
+}
+
 function JourneySection({ id, index, english, title, description, image, caption }: JourneySectionProps) {
   return <section id={id} className="journey-section butterfly-journey-page__chapter-section">
     <div className="journey-section-inner">
@@ -142,6 +305,7 @@ export default function ButterflyJourneyPage({ onBack }: { onBack: () => void })
   }, [])
 
   return <main ref={pageRef} className="butterfly-journey-page">
+    <ButterflyEffectLayer reducedMotion={reducedMotion} />
     <motion.button className="butterfly-journey-page__back" type="button" onClick={onBack} initial={false}>
       <span aria-hidden="true">←</span> 返回作品
     </motion.button>

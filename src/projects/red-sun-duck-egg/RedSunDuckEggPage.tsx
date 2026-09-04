@@ -122,7 +122,7 @@ export default function RedSunDuckEggPage({project,nextProject,onBack,onOpenProj
     </section>
 
     <section className="red-sun-brand-story red-sun-section">
-      <div className="red-sun-brand-story__layout red-sun-grid"><aside><SectionHeading index="05" english="BRAND STORY" title="品牌故事" /><ul><li>品牌传承</li><li>生态优养</li><li>古法腌制</li><li>真材实料</li></ul></aside><RevealImage src="brand-long-page.png" alt="红太阳咸鸭蛋品牌故事长页" /></div>
+      <div className="red-sun-brand-story__layout red-sun-grid"><aside><SectionHeading index="05" english="BRAND STORY" title="品牌故事" /><ul><li>品牌传承</li><li>生态优养</li><li>古法腌制</li><li>真材实料</li></ul></aside><RevealImage src="Frame 33942.png" alt="红太阳高邮咸鸭蛋品牌故事长页" /></div>
     </section>
 
     <section className="red-sun-identity red-sun-section">

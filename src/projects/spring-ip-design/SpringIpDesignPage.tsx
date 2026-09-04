@@ -12,7 +12,7 @@ const asset = (name: string) => `/assets/projects/su-ip-design/${name}`
 const slides = [
   { kind: 'image', image: 'campaign-keyvisual.png', eyebrow: 'IP DESIGN', year: '2026', centerMark: '普小罗', variant: 'keyvisual' },
   { kind: 'image', image: 'hero-garden.png', eyebrow: 'CHARACTER WORLD', title: '普罗小番茄', copy: '把春天、探索与快乐装进一个角色。' },
-  { kind: 'image', image: 'jimeng-2026-03-09-9605-参考图片风格，生成盲盒美学风格的番茄头卡通人物在童话森林场景中的图片，具有移轴摄... 1.png', eyebrow: 'SPRING CAMPAIGN', title: '踏春去！\n趣野不设限', copy: 'H5 INTERACTIVE EXPERIENCE · 2026', variant: 'scene' },
+  { kind: 'image', image: 'Frame 33943.png', eyebrow: 'SPRING CAMPAIGN', title: '踏春去！\n趣野不设限', copy: 'H5 INTERACTIVE EXPERIENCE · 2026', variant: 'scene' },
 ]
 
 function Heading({ index, english, title, inverse = false }: { index: string; english: string; title: string; inverse?: boolean }) {
@@ -48,14 +48,23 @@ function SummaryMetadata() {
 
 function ScrollNarrative() {
   const reduced = useReducedMotion()
-  return <section className={`spring-ip-scroll-story${reduced ? ' is-reduced' : ''}`} aria-label="角色与春日场景滚动叙事">
-    <div className="spring-ip-scroll-story__stage">
-      <div className="spring-ip-scroll-story__shape is-tomato" />
-      <div className="spring-ip-scroll-story__shape is-cream" />
-      <div className="spring-ip-scroll-story__grid"><motion.div className="spring-ip-scroll-story__copy" initial={reduced ? false : { opacity: .35, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .12 }} transition={{ duration: .54, ease }}><p>CHARACTER WORLD</p><h2>普罗小番茄</h2><span>把好奇、探索与快乐<br />装进一个角色。</span></motion.div></div>
-      <motion.img className="spring-ip-scroll-story__character" src={asset('character-hat.png')} alt="戴黄色帽子的普罗小番茄角色" initial={reduced ? false : { opacity: .55, y: 80, scale: .94 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: true, amount: .1 }} transition={{ duration: .7, delay: .08, ease }} />
-      <motion.div className="spring-ip-scroll-story__campaign" initial={reduced ? false : { opacity: .25, y: 58, scale: .98 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: true, amount: .16 }} transition={{ duration: .72, delay: .16, ease }}><img src={asset('campaign-keyvisual2.png')} alt="春日活动场景主视觉" /></motion.div>
-      <motion.div className="spring-ip-scroll-story__campaign-copy" initial={reduced ? false : { opacity: .35, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .16 }} transition={{ duration: .54, delay: .22, ease }}><p>04 / CAMPAIGN WORLD</p><span>SPRING SCENES</span><h2>春日场景延展</h2></motion.div>
+  return <section className={`spring-ip-scroll-story spring-ip-character-hero${reduced ? ' is-reduced' : ''}`} aria-label="普罗小番茄角色世界">
+    <div className="spring-ip-scroll-story__stage spring-ip-character-hero__inner">
+      <div className="spring-ip-character-hero__shape is-cream" aria-hidden="true" />
+      <div className="spring-ip-character-hero__shape is-tomato" aria-hidden="true" />
+      <motion.div className="spring-ip-character-hero__identity" initial={reduced ? false : { opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .18 }} transition={{ duration: reduced ? 0 : .78, ease }}>
+        <p className="spring-ip-character-hero__eyebrow"><i aria-hidden="true" /> CHARACTER WORLD</p>
+        <p className="spring-ip-character-hero__name-en">PU XIAO LUO</p><h2>普罗小番茄</h2><p className="spring-ip-character-hero__signature">Tomato Explorer</p>
+        <p className="spring-ip-character-hero__description">普罗小番茄，是一个充满好奇心的小小探索家。<br />TA喜欢探索世界，发现新奇与快乐。</p>
+      </motion.div>
+      <motion.div className="spring-ip-character-hero__route" initial={reduced ? false : { opacity: 0, y: 16 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .18 }} transition={{ duration: reduced ? 0 : .8, delay: reduced ? 0 : .16, ease }}>
+        <p>EXPLORE THE WORLD</p><div className="spring-ip-character-hero__route-track explore-route-stage"><svg className="spring-ip-character-hero__route-line" viewBox="0 0 760 271" preserveAspectRatio="none" aria-hidden="true"><path d="M90 120 C145 97 205 61 274 54 C355 67 440 95 532 130" /></svg><div className="spring-ip-character-hero__footprints" aria-hidden="true"><img src={asset('tomato-trail-mark.png')} alt="" /><img src={asset('tomato-trail-mark.png')} alt="" /><img src={asset('tomato-trail-mark.png')} alt="" /><img src={asset('tomato-trail-mark.png')} alt="" /><img src={asset('tomato-trail-mark.png')} alt="" /></div><article className="spring-ip-character-hero__route-node is-start"><img src={asset('表屏保4.png')} alt="普罗小番茄起点头像" /><div><b>START</b><span>普小罗出发</span></div></article><article className="spring-ip-character-hero__route-node is-picnic"><img src={asset('explore-picnic.png')} alt="春日野餐场景" /><div><b>01</b><strong>PICNIC DAY</strong><span>春日野餐</span></div></article><article className="spring-ip-character-hero__route-node is-ocean"><img src={asset('explore-ocean.png')} alt="海洋派对场景" /><div><b>02</b><strong>OCEAN PARTY</strong><span>海洋派对</span></div></article></div>
+      </motion.div>
+      <motion.figure className="spring-ip-character-hero__display" initial={reduced ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .16 }} transition={{ duration: reduced ? 0 : .92, delay: reduced ? 0 : .08, ease }}>
+        <img className="spring-ip-character-hero__glass-decor is-sparkles" src={asset('glass-sparkles.gif')} alt="" aria-hidden="true" />
+        <img className="spring-ip-character-hero__glass-decor is-petals" src={asset('glass-petals.gif')} alt="" aria-hidden="true" />
+        <video className="spring-ip-character-hero__character-video" autoPlay loop muted playsInline preload="auto" aria-label="玻璃展示舱与跳跃的普罗小番茄"><source src={asset('普罗小番茄_网页透明提亮修正版.webm')} type="video/webm" /></video>
+      </motion.figure>
     </div>
   </section>
 }

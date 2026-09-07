@@ -46,6 +46,7 @@ export default function ProjectListView({active,onOpenProject}:{active:boolean;o
   useEffect(()=>()=>{cancelHide();cancelAnimationFrame(frame.current)},[])
 
   useEffect(()=>{
+    if(!active){cancelAnimationFrame(frame.current);return}
     const follow=()=>{
       const preview=previewRef.current
       if(preview&&!touchMode){
@@ -57,7 +58,7 @@ export default function ProjectListView({active,onOpenProject}:{active:boolean;o
     }
     frame.current=requestAnimationFrame(follow)
     return()=>cancelAnimationFrame(frame.current)
-  },[touchMode])
+  },[touchMode,active])
 
   const placePreview=useCallback((clientX:number,clientY:number)=>{
     if(touchMode){return}

@@ -1,81 +1,32 @@
-import { AnimatePresence, motion, type MotionValue, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
-import { useCallback, useRef, useState } from 'react'
-import MediaPreview from '../components/MediaPreview'
+import { motion, useInView, useReducedMotion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
 import { Reveal } from '../components/Reveal'
-const steps = [
-  { title: '学习入口', text: '从首页进入清晰的学习旅程。', src: 'motion-home.gif', alt: '宝宝小课堂学习首页' },
-  { title: '学习过程', text: '用路径串联内容与连续探索。', src: 'motion-map.gif', alt: '宝宝小课堂学习地图' },
-  { title: '成长反馈', text: '以可理解的视觉线索提示进度。', src: 'profile.png', alt: '宝宝小课堂成长记录' },
-]
 
-const learningEntryCards = [
-  { id: 'entry-launch', title: '宝宝小课堂启动页', src: 'learning-entry-launch.png', alt: '宝宝小课堂启动页' },
-  { id: 'entry-home', title: '宝宝小课堂首页', src: 'learning-entry-home.png', alt: '宝宝小课堂首页' },
-  { id: 'entry-goals', title: '目标选择页', src: 'learning-entry-goals.png', alt: '宝宝小课堂目标选择页' },
-  { id: 'entry-test', title: '英语测试入口页', src: 'learning-entry-test.png', alt: '宝宝小课堂英语测试页面' },
-]
-const CARD_STEP = 456
+const asset = (name: string) => `/assets/projects/baby-classroom/images/${name}`
+const stages = [
+  { number: '01', nav: 'ENTRY', eyebrow: '01 / LEARNING ENTRY', title: '学习入口', gif: '6.gif', alt: '宝宝小课堂首页与学习入口', tone: 'entry', copy: <>通过内容推荐、课程分类与每日成长模块，为儿童建立清晰直观的学习入口。<br />大尺寸图形与 IP 角色降低理解门槛，让内容选择更加轻松。</>, tags: ['内容分类', 'IP引导', '低门槛操作'] },
+  { number: '02', nav: 'EXPLORE', eyebrow: '02 / EXPLORATORY LEARNING', title: '探索式学习', gif: '2.gif', alt: '宝宝小课堂路径闯关学习体验', tone: 'explore', copy: <>将课程拆解为连续的关卡路径，通过解锁、推进与场景探索，让学习过程具备明确的目标感。<br /><br />IP角色融入学习环境，在推进过程中持续提供陪伴与情绪引导。</>, tags: ['关卡推进', '场景探索', 'IP陪伴'] },
+  { number: '03', nav: 'FEEDBACK', eyebrow: '03 / GROWTH FEEDBACK', title: '成长反馈', gif: '5.gif', alt: '宝宝小课堂每日测试与学习进度', tone: 'feedback', copy: <>通过每日测试、学习进度与任务完成状态，将学习成果转化为可感知的成长反馈。<br /><br />清晰的进度信息帮助儿童理解自己的学习状态，并形成持续学习动力。</>, tags: ['学习进度', '任务反馈', '持续成长'] },
+] as const
 
-function LearningEntryCard({ card, index, continuousIndex, reduced }: { card: typeof learningEntryCards[number]; index: number; continuousIndex: MotionValue<number>; reduced: boolean | null }) {
-  const relative = useTransform(continuousIndex, value => reduced ? index : index - value)
-  const y = useTransform(relative, value => value * CARD_STEP)
-  const scale = useTransform(relative, value => {
-    const distance = Math.abs(value)
-    return distance >= 1 ? .8 : 1 - (.2 * distance)
-  })
-  const opacity = useTransform(relative, value => {
-    const distance = Math.abs(value)
-    if (distance >= 1.5) return 0
-    if (distance >= 1) return .34 * (1 - ((distance - 1) / .5))
-    return 1 - (.66 * distance)
-  })
-  const filter = useTransform(relative, value => `blur(${Math.min(Math.abs(value) * 1.2, 2.4)}px)`)
-  const zIndex = useTransform(relative, value => Math.max(0, 100 - Math.round(Math.abs(value) * 20)))
-
-  return <motion.figure className="learning-entry-card" style={{ y, scale, opacity, filter, zIndex }}>
-    <img src={`/assets/projects/baby-classroom/images/${card.src}`} alt={card.alt} />
-  </motion.figure>
-}
-
-function LearningEntryStack({ continuousIndex, reduced }: { continuousIndex: MotionValue<number>; reduced: boolean | null }) {
-  return <div className="learning-entry-stack" aria-label="学习入口界面展示">
-    {learningEntryCards.map((card, index) => <LearningEntryCard key={card.id} card={card} index={index} continuousIndex={continuousIndex} reduced={reduced} />)}
-  </div>
+function ExperienceStage({ stage, index, onActive }: { stage: typeof stages[number]; index: number; onActive: (index: number) => void }) {
+  const ref = useRef<HTMLElement>(null)
+  const reduced = useReducedMotion()
+  const inView = useInView(ref, { amount: .42 })
+  useEffect(() => { if (inView) onActive(index) }, [inView, index, onActive])
+  const transition = { duration: reduced ? 0 : .72, ease: [0.22, 1, 0.36, 1] as const }
+  return <motion.article ref={ref} className={`experience-stage experience-stage--${stage.tone}`} initial={reduced ? false : { opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={transition}>
+    <div className="experience-stage__copy"><p className="eyebrow">{stage.eyebrow}</p><h3>{stage.title}</h3><p className="experience-stage__body">{stage.copy}</p><ul className="experience-tags">{stage.tags.map(tag => <li key={tag}>{tag}</li>)}</ul></div>
+    <motion.figure className="experience-stage__media" initial={reduced ? false : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .24 }} transition={{ ...transition, delay: reduced ? 0 : .14 }}>
+      <img className="experience-main-gif" src={asset(stage.gif)} alt={stage.alt} />
+    </motion.figure>
+  </motion.article>
 }
 
 export default function Experience() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const storyRef = useRef<HTMLDivElement>(null)
-  const scrollContainerRef = useRef<HTMLElement | null>(null)
   const [active, setActive] = useState(0)
-  const [preview, setPreview] = useState<{ type: 'image'; src: string; title: string } | null>(null)
-  const reduced = useReducedMotion()
-  const setSectionRef = useCallback((node: HTMLElement | null) => {
-    sectionRef.current = node
-    scrollContainerRef.current = node?.closest<HTMLElement>('.baby-classroom-page') ?? null
-  }, [])
-  const { scrollYProgress } = useScroll({ container: scrollContainerRef, target: storyRef, offset: ['start start', 'end end'] })
-  const progress = useTransform(scrollYProgress, [0, 1], [0, 1])
-  const learningEntryProgress = useTransform(scrollYProgress, [0, .62], [0, learningEntryCards.length - 1])
-  const learningEntryIndex = useSpring(learningEntryProgress, { stiffness: 190, damping: 31, mass: .32 })
-  const asset = (name: string) => `/assets/projects/baby-classroom/images/${name}`
-  const current = steps[active]
-  useMotionValueEvent(scrollYProgress, 'change', value => setActive(value < .64 ? 0 : value < .82 ? 1 : 2))
-
-  return <section ref={setSectionRef} id="experience" className="experience section">
-    <div className="content experience-inner">
-      <div className="experience-intro"><Reveal><p className="eyebrow">03 / APP EXPERIENCE</p></Reveal><div className="experience-title-wrap"><h2 className="experience-title">探索式<span>学习体验</span></h2></div><p className="body-copy">从进入应用到完成一次学习，每个页面都保持轻松、清晰与积极的节奏。</p></div>
-      <div ref={storyRef} className="experience-story">
-        <div className="experience-sticky">
-          <div className="map-steps"><div className="map-progress" aria-hidden="true"><i /><motion.i className="map-progress__active" style={reduced ? undefined : { scaleY: progress }} /></div>{steps.map((step, index) => <motion.article key={step.title} className={active === index ? 'active' : ''} aria-current={active === index ? 'step' : undefined} initial={false} animate={{ opacity: active === index ? 1 : .28, x: active === index ? 6 : 0 }} transition={{ duration: .36, ease: [0.22, 1, .36, 1] }}><span>0{index + 1}</span><h3>{step.title}</h3><p>{step.text}</p>{index === 1 && <button className="map-preview-button" type="button" onClick={() => setPreview({ type: 'image', src: asset('map.png'), title: '宝宝小课堂完整学习地图' })}>查看完整学习地图 <b>→</b></button>}<div className="experience-mobile-media"><img src={asset(step.src)} alt={step.alt} /></div></motion.article>)}</div>
-          <aside className="map-stage" aria-live="polite">
-            {active === 0
-              ? <LearningEntryStack continuousIndex={learningEntryIndex} reduced={reduced} />
-              : <AnimatePresence mode="sync" initial={false}><motion.img key={current.src} src={asset(current.src)} alt={current.alt} initial={reduced ? false : { opacity: 0, scale: 1.012 }} animate={{ opacity: 1, scale: 1 }} exit={reduced ? undefined : { opacity: 0, scale: .985 }} transition={{ duration: .46, ease: [0.22, 1, .36, 1] }} /></AnimatePresence>}
-          </aside>
-        </div>
-      </div>
-    </div>
-    <MediaPreview preview={preview} onClose={() => setPreview(null)} />
-  </section>
+  return <section id="experience" className="experience section"><div className="content experience-inner">
+    <div className="experience-intro"><Reveal><p className="eyebrow">03 / APP EXPERIENCE</p></Reveal><div className="experience-title-wrap"><h2 className="experience-title">探索式<span>学习体验</span></h2></div><p className="body-copy">将学习路径拆解为进入、探索与反馈三个阶段，通过真实界面展示核心体验如何落地。</p></div>
+    <div className="experience-layout"><nav className="experience-step-nav" aria-label="体验阶段导航">{stages.map((stage, index) => <a key={stage.nav} className={active === index ? 'active' : ''} href={`#experience-${stage.number}`}><b>{stage.number}</b><span>{stage.nav}</span></a>)}</nav><div className="experience-stages">{stages.map((stage, index) => <div id={`experience-${stage.number}`} key={stage.number}><ExperienceStage stage={stage} index={index} onActive={setActive} /></div>)}<section className="learning-loop" aria-label="一次完整学习旅程"><p>ONE LEARNING LOOP</p><h3>一次完整学习旅程</h3><ol>{['发现内容', '进入学习', '探索关卡', '完成任务', '获得反馈', '继续学习'].map((item, index) => <li key={item}><span>0{index + 1}</span><b>{item}</b>{index < 5 && <i>→</i>}</li>)}</ol></section></div></div>
+  </div></section>
 }

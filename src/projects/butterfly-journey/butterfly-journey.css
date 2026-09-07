@@ -50,7 +50,7 @@
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: 24px;
-  width: min(1480px, calc(100vw - 96px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   min-height: 118svh;
   margin-inline: auto;
   padding: clamp(136px, 16vh, 188px) 0 clamp(92px, 10vh, 144px);
@@ -71,6 +71,11 @@
 .butterfly-journey-page__hero-visual img { display: block; width: 100%; height: auto; object-fit: contain; transition: transform .45s cubic-bezier(.22,1,.36,1); }
 .butterfly-journey-page__hero-visual:hover { transform: scale(.995); }
 .butterfly-journey-page__hero-visual:hover img { transform: scale(1.015); }
+.butterfly-journey-page__hero-butterfly-layer { position: fixed; z-index: 14; inset: 0; width: 100vw; height: 100dvh; overflow: hidden; pointer-events: none; }
+.butterfly-journey-page__hero-butterfly { position: absolute; left: 73%; top: 30%; width: clamp(96px, 9vw, 148px); will-change: left, top, transform; filter: drop-shadow(0 14px 16px rgba(14, 4, 2, .3)); }
+.butterfly-journey-page__hero-butterfly img { display: block; width: 100%; height: auto; transform-origin: 52% 50%; will-change: transform; }
+.butterfly-journey-page__hero-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.butterfly-journey-page__hero-particles span { position: absolute; display: block; border-radius: 999px; background: radial-gradient(circle at 35% 35%, #fff7d1 0 15%, #efd080 36%, rgba(209, 150, 61, .1) 72%); box-shadow: 0 0 8px rgba(232, 185, 91, .7); will-change: transform, opacity; }
 .butterfly-journey-page__chapter-index { position: fixed; z-index: 15; top: 50%; right: clamp(20px, 2.4vw, 48px); display: grid; gap: 14px; transform: translateY(-50%); }
 .butterfly-journey-page__chapter-index a { display: flex; align-items: center; justify-content: flex-end; gap: 10px; color: rgba(233,215,180,.32); font-size: 11px; font-weight: 600; letter-spacing: .12em; text-decoration: none; transition: color .3s ease, opacity .3s ease; white-space: nowrap; }
 .butterfly-journey-page__chapter-index a:hover { color: rgba(233,215,180,.7); }
@@ -131,6 +136,7 @@
   .butterfly-journey-page__hero-number,
   .butterfly-journey-page__chapter-index { display: none; }
   .butterfly-journey-page__hero-visual { margin: 66px 0 0; }
+  .butterfly-journey-page__hero-butterfly { width: 104px; }
   .butterfly-journey-page__gallery { display: block; padding: 0 20px 96px; background: var(--cream); }
   .butterfly-journey-page__gallery-item,
   .butterfly-journey-page__gallery-item.is-item-2,
@@ -168,7 +174,7 @@
 .butterfly-journey-page__gallery {
   display: flex;
   flex-direction: column;
-  width: min(1380px, calc(100vw - 96px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin-inline: auto;
   padding: 64px 0 96px;
   row-gap: 32px;
@@ -290,7 +296,7 @@
 }
 
 .butterfly-journey-page__first-work figure {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
 }
 
@@ -303,7 +309,7 @@
 }
 
 .butterfly-journey-page__gallery {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   padding-top: 0;
   row-gap: 32px;
 }
@@ -367,7 +373,7 @@
 }
 
 .butterfly-journey-page__visual-narrative {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
   padding: 56px 0 0;
 }
@@ -404,7 +410,7 @@
 
 .butterfly-journey-page__first-work-copy {
   display: grid;
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto 28px;
   gap: 9px;
 }
@@ -434,7 +440,7 @@
 
 .butterfly-journey-page__first-work figure,
 .butterfly-journey-page__gallery {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
 }
 
 .butterfly-journey-page__first-work figure,
@@ -580,7 +586,7 @@
 .butterfly-journey-page__gallery {
   display: flex;
   flex-direction: column;
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   height: auto;
   min-height: 0;
   padding: 0 0 96px;
@@ -606,7 +612,7 @@
 
 /* Shared display system for the six core journey visuals. */
 .journey-figure {
-  width: min(1360px, calc(100vw - 144px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
 }
 
@@ -630,11 +636,11 @@
 
 .butterfly-journey-page__first-work .journey-figure,
 .butterfly-journey-page__gallery-item.journey-figure {
-  width: min(1360px, calc(100vw - 144px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
 }
 
 .butterfly-journey-page__gallery {
-  width: min(1360px, calc(100vw - 144px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
 }
 
 .butterfly-journey-page__first-work-copy,
@@ -654,6 +660,21 @@
   }
 }
 
+/* Enlarge the visual evidence and its secondary reading layer without changing the chapter grid. */
+@media (min-width: 900px) {
+  .journey-figure,
+  .butterfly-journey-page__first-work .journey-figure,
+  .butterfly-journey-page__gallery-item.journey-figure { width:min(2160px,calc(100vw - clamp(96px,14vw,288px))); }
+
+  .butterfly-journey-page__first-work-copy > span,
+  .butterfly-journey-page__gallery-item figcaption > span { font-size:15px; }
+
+  .butterfly-journey-page__first-work-copy p,
+  .butterfly-journey-page__gallery-item figcaption p { max-width:760px; font-size:18px; line-height:1.85; }
+
+  .journey-figure .butterfly-journey-page__figure-caption { font-size:13px; }
+}
+
 /* 02–04 use one shared reading template: a single content edge, copy system, and figure width. */
 .journey-section {
   width: 100%;
@@ -663,7 +684,7 @@
 }
 
 .journey-section-inner {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin-inline: auto;
 }
 
@@ -780,7 +801,7 @@
 }
 
 .journey-figure {
-  width: min(1360px, calc(100vw - 144px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
 }
 
@@ -811,7 +832,7 @@
 
 /* Fixed 01–04 reading template: shared left edge, readable copy, centred art. */
 .journey-section-copy {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   max-width: none;
   margin: 0 auto 40px;
   padding: 0;
@@ -832,7 +853,7 @@
 .journey-figure,
 .butterfly-journey-page__first-work .journey-figure,
 .butterfly-journey-page__gallery-item.journey-figure {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
 }
 
@@ -851,7 +872,7 @@
 }
 
 .butterfly-journey-page__gallery {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   row-gap: 96px;
 }
 

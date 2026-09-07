@@ -50,7 +50,7 @@
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: 24px;
-  width: min(1480px, calc(100vw - 96px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   min-height: 118svh;
   margin-inline: auto;
   padding: clamp(136px, 16vh, 188px) 0 clamp(92px, 10vh, 144px);
@@ -174,7 +174,7 @@
 .butterfly-journey-page__gallery {
   display: flex;
   flex-direction: column;
-  width: min(1380px, calc(100vw - 96px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin-inline: auto;
   padding: 64px 0 96px;
   row-gap: 32px;
@@ -296,7 +296,7 @@
 }
 
 .butterfly-journey-page__first-work figure {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
 }
 
@@ -309,7 +309,7 @@
 }
 
 .butterfly-journey-page__gallery {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   padding-top: 0;
   row-gap: 32px;
 }
@@ -373,7 +373,7 @@
 }
 
 .butterfly-journey-page__visual-narrative {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
   padding: 56px 0 0;
 }
@@ -410,7 +410,7 @@
 
 .butterfly-journey-page__first-work-copy {
   display: grid;
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto 28px;
   gap: 9px;
 }
@@ -440,7 +440,7 @@
 
 .butterfly-journey-page__first-work figure,
 .butterfly-journey-page__gallery {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
 }
 
 .butterfly-journey-page__first-work figure,
@@ -586,7 +586,7 @@
 .butterfly-journey-page__gallery {
   display: flex;
   flex-direction: column;
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   height: auto;
   min-height: 0;
   padding: 0 0 96px;
@@ -612,7 +612,7 @@
 
 /* Shared display system for the six core journey visuals. */
 .journey-figure {
-  width: min(1360px, calc(100vw - 144px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
 }
 
@@ -636,11 +636,11 @@
 
 .butterfly-journey-page__first-work .journey-figure,
 .butterfly-journey-page__gallery-item.journey-figure {
-  width: min(1360px, calc(100vw - 144px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
 }
 
 .butterfly-journey-page__gallery {
-  width: min(1360px, calc(100vw - 144px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
 }
 
 .butterfly-journey-page__first-work-copy,
@@ -664,7 +664,7 @@
 @media (min-width: 900px) {
   .journey-figure,
   .butterfly-journey-page__first-work .journey-figure,
-  .butterfly-journey-page__gallery-item.journey-figure { width:min(1480px,calc(100vw - 120px)); }
+  .butterfly-journey-page__gallery-item.journey-figure { width:min(2160px,calc(100vw - clamp(96px,14vw,288px))); }
 
   .butterfly-journey-page__first-work-copy > span,
   .butterfly-journey-page__gallery-item figcaption > span { font-size:15px; }
@@ -684,7 +684,7 @@
 }
 
 .journey-section-inner {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin-inline: auto;
 }
 
@@ -801,7 +801,7 @@
 }
 
 .journey-figure {
-  width: min(1360px, calc(100vw - 144px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
 }
 
@@ -832,7 +832,7 @@
 
 /* Fixed 01–04 reading template: shared left edge, readable copy, centred art. */
 .journey-section-copy {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   max-width: none;
   margin: 0 auto 40px;
   padding: 0;
@@ -853,7 +853,7 @@
 .journey-figure,
 .butterfly-journey-page__first-work .journey-figure,
 .butterfly-journey-page__gallery-item.journey-figure {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   margin: 0 auto;
 }
 
@@ -872,7 +872,7 @@
 }
 
 .butterfly-journey-page__gallery {
-  width: min(1320px, calc(100vw - 120px));
+  width:min(2160px,calc(100vw - clamp(96px,14vw,288px)));
   row-gap: 96px;
 }
 

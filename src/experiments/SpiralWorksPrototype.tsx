@@ -91,7 +91,7 @@ export default function SpiralWorksPrototype(){
     {!isDetail&&<ViewSwitcher viewMode={viewMode} onChange={mode=>{if(mode!==viewMode)playUIClick();setViewMode(mode)}}/>} 
     {!isDetail&&<CornerMenu onWorks={showWorks} onContact={openContact}/>} 
     <div className={`spiral-prototype-spiral-view ${isSpiral&&!isDetail?'is-active':''}`} aria-hidden={!isSpiral||isDetail}>
-      <WebGLCapabilityGate onProject={setProjectIndex} onOpenProject={openProjectByIndex} onDebug={debugEnabled?setDebug:undefined} showGuides={debugEnabled}/>
+      <WebGLCapabilityGate active={!videoSrc} onProject={setProjectIndex} onOpenProject={openProjectByIndex} onDebug={debugEnabled?setDebug:undefined} showGuides={debugEnabled}/>
       <SpiralOverlay index={projectIndex}/>
       {debugEnabled&&debug&&<aside className="spiral-prototype-debug">
         <span>hover eligible slots: {debug.hoverEligibleSlotIds.join(', ')||'none'} · hovered slot: {debug.hoveredSlotId??'none'}</span>
@@ -101,7 +101,7 @@ export default function SpiralWorksPrototype(){
         {opacityBands&&<span>opacity bands — front: {opacityBands[0].currentOpacity.toFixed(2)} · side: {opacityBands[1].currentOpacity.toFixed(2)} · rear: {opacityBands[2].currentOpacity.toFixed(2)}</span>}
       </aside>}
     </div>
-    <ProjectListView active={!isSpiral&&!isDetail} onOpenProject={openProject}/>
+    <ProjectListView active={!isSpiral&&!isDetail&&!videoSrc} onOpenProject={openProject}/>
     {detailProject?.id==='baby-classroom'?<BabyClassroomPage onBack={backToWorks}/>:detailProject?.id==='su-ip-design'?<SpringIpDesignPage project={detailProject} onBack={backToWorks} nextProject={nextProject} onOpenProject={openProject}/>:detailProject?.id==='butterfly-journey'?<ButterflyJourneyPage onBack={backToWorks}/>:detailProject?.id==='red-sun-duck-egg'?<RedSunDuckEggPage project={detailProject} onBack={backToWorks} nextProject={nextProject} onOpenProject={openProject}/>:detailProject?.id==='ae-live-gift'?<AELiveGiftPage onBack={backToWorks} nextProject={nextProject} onOpenProject={openProject}/>:detailProject&&<ProjectDetail project={detailProject} nextProject={nextProject} onBack={backToWorks} onOpenProject={openProject}/>} 
     <AnimatePresence>{videoSrc&&<VideoViewer src={videoSrc} onClose={()=>setVideoSrc(null)}/>}</AnimatePresence>
   </main>

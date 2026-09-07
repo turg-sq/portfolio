@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import type { SpiralProject } from '../../experiments/spiral/spiralProjects'
 import './spring-ip-design.css'
@@ -47,6 +47,23 @@ function SummaryMetadata() {
 }
 
 function ScrollNarrative() {
+  useLayoutEffect(() => {
+    const stage = document.querySelector('.explore-route-stage')
+    const path = stage?.querySelector('path') as SVGPathElement | null
+    const marks = [...(stage?.querySelectorAll('.spring-ip-character-hero__footprints img') ?? [])] as HTMLImageElement[]
+    if (!path || !marks.length) return
+    const length = path.getTotalLength()
+    // Keep footprints in the open spans between the three node exclusion zones.
+    const ts = [0.10, 0.22, 0.32, 0.62, 0.76]
+    marks.forEach((mark, i) => {
+      const p = path.getPointAtLength(length * ts[i])
+      const next = path.getPointAtLength(Math.min(length, length * ts[i] + 2))
+      const angle = Math.max(-12, Math.min(12, Math.atan2(next.y - p.y, next.x - p.x) * 180 / Math.PI))
+      mark.style.left = `${p.x}px`
+      mark.style.top = `${p.y}px`
+      mark.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`
+    })
+  }, [])
   const reduced = useReducedMotion()
   return <section className={`spring-ip-scroll-story spring-ip-character-hero${reduced ? ' is-reduced' : ''}`} aria-label="普罗小番茄角色世界">
     <div className="spring-ip-scroll-story__stage spring-ip-character-hero__inner">
@@ -64,6 +81,7 @@ function ScrollNarrative() {
         <img className="spring-ip-character-hero__glass-decor is-sparkles" src={asset('glass-sparkles.gif')} alt="" aria-hidden="true" />
         <img className="spring-ip-character-hero__glass-decor is-petals" src={asset('glass-petals.gif')} alt="" aria-hidden="true" />
         <video className="spring-ip-character-hero__character-video" autoPlay loop muted playsInline preload="auto" aria-label="玻璃展示舱与跳跃的普罗小番茄"><source src={asset('普罗小番茄_网页透明提亮修正版.webm')} type="video/webm" /></video>
+        <img className="spring-ip-character-hero__glass-decor is-gold-sparkles" src={asset('glass-sparkles.gif')} alt="" aria-hidden="true" />
       </motion.figure>
     </div>
   </section>

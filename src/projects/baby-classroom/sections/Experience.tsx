@@ -19,7 +19,6 @@ function ExperienceStage({ stage, index, onActive }: { stage: typeof stages[numb
     <div className="experience-stage__copy"><p className="eyebrow">{stage.eyebrow}</p><h3>{stage.title}</h3><p className="experience-stage__body">{stage.copy}</p><ul className="experience-tags">{stage.tags.map(tag => <li key={tag}>{tag}</li>)}</ul></div>
     <motion.figure className="experience-stage__media" initial={reduced ? false : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .24 }} transition={{ ...transition, delay: reduced ? 0 : .14 }}>
       <img className="experience-main-gif" src={asset(stage.gif)} alt={stage.alt} />
-      {stage.tone === 'entry' && <div className="entry-flow" aria-label="登录到首页的前置流程"><figure><img src={asset('3.gif')} alt="宝宝小课堂登录页" /><figcaption>LOGIN</figcaption></figure><b>→</b><figure><img src={asset('1.gif')} alt="宝宝小课堂加载页" /><figcaption>LOADING</figcaption></figure><b>→</b><span>HOME</span></div>}
     </motion.figure>
   </motion.article>
 }

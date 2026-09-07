@@ -122,12 +122,34 @@ export default function RedSunDuckEggPage({project,nextProject,onBack,onOpenProj
     </section>
 
     <section className="red-sun-brand-story red-sun-section">
-      <div className="red-sun-brand-story__layout red-sun-grid"><aside><SectionHeading index="05" english="BRAND STORY" title="品牌故事" /><ul><li>品牌传承</li><li>生态优养</li><li>古法腌制</li><li>真材实料</li></ul></aside><RevealImage src="Frame 33942.png" alt="红太阳高邮咸鸭蛋品牌故事长页" /></div>
+      <div className="red-sun-brand-story__layout red-sun-grid"><aside><SectionHeading index="05" english="BRAND STORY" title="品牌故事" /><ul><li>品牌传承</li><li>生态优养</li><li>古法腌制</li><li>真材实料</li></ul></aside><RevealImage src="Frame 33942(1).png" alt="红太阳高邮咸鸭蛋品牌故事长页" /></div>
     </section>
 
-    <section className="red-sun-identity red-sun-section">
+        <section className="red-sun-identity red-sun-section">
       <SectionHeading index="06" english="BRAND IDENTITY" title="品牌识别" />
-      <div className="brand-identity-content red-sun-identity__grid red-sun-grid"><RevealImage src="brand-logo.png" alt="红太阳咸鸭蛋品牌标志展示" className="brand-identity-visual" /><motion.div className="brand-identity-copy" initial={reducedMotion?false:{opacity:0,y:16}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.18}} transition={{duration:.54,ease}}><p className="brand-identity-copy__eyebrow">01 / LOGO SYSTEM</p><h3>标志设计</h3><p>标志以太阳、水域和蛋黄形态建立关联，通过红色与橙色形成品牌识别，并与包装中的鸭、芦苇和水纹元素保持一致。</p></motion.div><div className="red-sun-identity__index" aria-label="品牌系统索引"><span>SYMBOL</span><span>COLOR</span><span>PATTERN</span><span>TYPE</span></div><div className="red-sun-identity__brand-system"><div className="red-sun-identity__brand-copy"><p>02 / BRAND SYSTEM</p><h3>视觉延展</h3><p>围绕红太阳品牌标志、米白与砖红色彩及水域纹样建立统一视觉语言，使标志、包装与应用场景保持一致的品牌识别。</p></div><div className="red-sun-identity__brand-system-display"><RevealImage src="brand-story.png" alt="红太阳咸鸭蛋品牌视觉故事" className="brand-identity-story-image" /><RevealImage src="flash-installation.png" alt="快闪平面图" className="brand-identity-flash-image" /></div></div></div>
+      <div className="red-sun-identity__modules">
+        <article className="red-sun-identity__module red-sun-identity__module--logo">
+          <div className="red-sun-identity__module-label"><span>01</span><b>LOGO SYSTEM</b></div>
+          <div className="red-sun-identity__logo-mark"><span>红太阳</span><i>高邮咸鸭蛋</i></div>
+          <p>以太阳、水域与蛋黄形态建立品牌识别，延续传统风味的地域记忆。</p>
+        </article>
+        <article className="red-sun-identity__module red-sun-identity__module--color">
+          <div className="red-sun-identity__module-label"><span>02</span><b>COLOR SYSTEM</b></div>
+          <div className="red-sun-identity__swatches"><div><i></i><span>砖红<br /><small>#B43B2F</small></span></div><div><i></i><span>米白<br /><small>#F3EAD8</small></span></div><div><i></i><span>暖金<br /><small>#BD9148</small></span></div></div>
+          <p>砖红承担品牌识别，米白建立温度，暖金用于细节强调。</p>
+        </article>
+        <article className="red-sun-identity__module red-sun-identity__module--pattern">
+          <div className="red-sun-identity__module-label"><span>03</span><b>SUPPORTING GRAPHICS</b></div>
+          <div className="red-sun-identity__pattern-sample" aria-hidden="true"><span></span><i></i></div>
+          <h3>水域 · 稻穗 · 太阳</h3>
+          <p>将水纹、稻穗与太阳元素组合为可延展的辅助图形，统一包装与传播应用。</p>
+        </article>
+        <article className="red-sun-identity__module red-sun-identity__module--application">
+          <div className="red-sun-identity__module-label"><span>04</span><b>VISUAL APPLICATION</b></div>
+          <RevealImage src="product-scene.png" alt="红太阳咸鸭蛋包装应用场景" className="red-sun-identity__application-image" />
+          <p>包装、礼盒与场景物料在同一套色彩与纹样系统中保持连续识别。</p>
+        </article>
+      </div>
     </section>
 
     <section className="red-sun-application red-sun-section">

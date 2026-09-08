@@ -33,3 +33,100 @@
   max-width: 100%;
   border-radius: 0;
 }
+
+/* Continue the hero's purple-black field behind the full viewport; avoid a separate black side strip. */
+.ae-live-gift-page {
+  background: linear-gradient(135deg, #151118 0%, #211523 100%);
+}
+
+/* Desktop hero proportion correction — scoped to this project only. */
+@media (min-width: 768px) {
+  .ae-live-gift-page__back {
+    min-height: 42px;
+    padding-inline: 16px;
+    font-size: 14px;
+  }
+
+  .ae-live-gift-page .ae-gift-hero {
+    width: min(1500px, calc(100vw - clamp(96px, 14vw, 288px)));
+    min-height: min(100svh, 980px);
+    grid-template-columns: minmax(0, .95fr) minmax(320px, 1.05fr);
+    gap: clamp(36px, 3vw, 48px);
+    padding-top: clamp(96px, 8vh, 112px);
+    padding-bottom: clamp(52px, 6vh, 72px);
+  }
+
+  /* Full-bleed chapter backgrounds with the original content gutter preserved. */
+  .ae-live-gift-page .ae-gift-process,
+  .ae-live-gift-page .ae-gift-summary {
+    width: 100%;
+    max-width: none;
+    padding-inline: max(48px, calc((100vw - min(2160px, calc(100vw - clamp(96px, 14vw, 288px)))) / 2));
+  }
+
+  .ae-live-gift-page .ae-gift-eyebrow {
+    font-size: 11px;
+  }
+
+  .ae-live-gift-page .ae-gift-hero h1 {
+    max-width: 560px;
+    margin-top: 20px;
+    font-size: clamp(48px, 5.2vw, 84px);
+    line-height: 1;
+  }
+
+  .ae-live-gift-page .ae-gift-hero__meta {
+    margin-top: 20px;
+    font-size: 13px;
+  }
+
+  .ae-live-gift-page .ae-gift-hero__description {
+    max-width: 500px;
+    margin-top: 26px;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  .ae-live-gift-page .ae-gift-hero__media {
+    width: min(100%, 440px);
+    padding: 13px;
+    left: -40px;
+  }
+
+  /* Keep the live glass capsule clear of the title while reducing its footprint. */
+  .ae-live-gift-page .baby-liquid-glass-cursor {
+    width: 238px;
+    height: 146px;
+    margin-left: 64px;
+  }
+
+  .ae-live-gift-page .ae-gift-hero__media img {
+    width: 100%;
+    max-height: calc(100svh - 200px);
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* Align the main copy with the eyebrow's text while leaving hero ornaments untouched. */
+  .ae-live-gift-page .ae-gift-hero__copy > h1,
+  .ae-live-gift-page .ae-gift-hero__copy > .ae-gift-hero__meta,
+  .ae-live-gift-page .ae-gift-hero__copy > .ae-gift-hero__description {
+    position: relative;
+    left: 70px;
+  }
+
+  /* Ring-gift motion frame: keep the portrait media centered with safe viewport margins. */
+  .ae-live-gift-page .ae-motion-showcase__stage {
+    width: min(100%, 500px);
+    max-height: calc(100svh - 64px);
+    height: auto;
+  }
+
+  .ae-live-gift-page .ae-motion-showcase__media img {
+    width: auto;
+    max-width: 100%;
+    max-height: calc(100svh - 64px);
+    height: auto;
+    object-fit: contain;
+  }
+}

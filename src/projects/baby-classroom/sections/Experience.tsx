@@ -6,7 +6,7 @@ const asset = (name: string) => `/assets/projects/baby-classroom/images/${name}`
 const stages = [
   { number: '01', nav: 'ENTRY', eyebrow: '01 / LEARNING ENTRY', title: '学习入口', gif: '6.gif', alt: '宝宝小课堂首页与学习入口', tone: 'entry', copy: <>通过内容推荐、课程分类与每日成长模块，为儿童建立清晰直观的学习入口。<br />大尺寸图形与 IP 角色降低理解门槛，让内容选择更加轻松。</>, tags: ['内容分类', 'IP引导', '低门槛操作'] },
   { number: '02', nav: 'EXPLORE', eyebrow: '02 / EXPLORATORY LEARNING', title: '探索式学习', gif: '2.gif', alt: '宝宝小课堂路径闯关学习体验', tone: 'explore', copy: <>将课程拆解为连续的关卡路径，通过解锁、推进与场景探索，让学习过程具备明确的目标感。<br /><br />IP角色融入学习环境，在推进过程中持续提供陪伴与情绪引导。</>, tags: ['关卡推进', '场景探索', 'IP陪伴'] },
-  { number: '03', nav: 'FEEDBACK', eyebrow: '03 / GROWTH FEEDBACK', title: '成长反馈', gif: '5.gif', alt: '宝宝小课堂每日测试与学习进度', tone: 'feedback', copy: <>通过每日测试、学习进度与任务完成状态，将学习成果转化为可感知的成长反馈。<br /><br />清晰的进度信息帮助儿童理解自己的学习状态，并形成持续学习动力。</>, tags: ['学习进度', '任务反馈', '持续成长'] },
+  { number: '03', nav: 'INCENTIVE', eyebrow: '03 / ACTIVITY INCENTIVE', title: '活动激励', gif: '5.gif', alt: '宝宝小课堂限时活动与奖励兑换弹窗', tone: 'feedback', copy: <>通过限时活动与奖励兑换机制，在学习过程中设置阶段性吸引点，提升孩子的参与意愿。<br /><br />鲜明的弹窗信息快速传达活动内容，明确的操作入口缩短从浏览到参与的路径。</>, tags: ['限时活动', '奖励兑换', '参与引导'] },
 ] as const
 
 function ExperienceStage({ stage, index, onActive }: { stage: typeof stages[number]; index: number; onActive: (index: number) => void }) {

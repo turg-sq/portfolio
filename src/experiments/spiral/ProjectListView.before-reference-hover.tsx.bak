@@ -1,0 +1,84 @@
+import {AnimatePresence,motion} from 'framer-motion'
+import {useCallback,useEffect,useRef,useState} from 'react'
+import {spiralProjects,type SpiralProject} from './spiralProjects'
+
+type Point={x:number;y:number}
+
+function openProject(project:SpiralProject){
+  // The isolated prototype has no addressable detail route; retain the project's real slug for host integration.
+  console.info('Open project:',project.slug)
+}
+
+export default function ProjectListView({active}:{active:boolean}){
+  const [hoveredProject,setHoveredProject]=useState<SpiralProject|null>(null)
+  const [touchMode,setTouchMode]=useState(false)
+  const previewRef=useRef<HTMLDivElement>(null)
+  const target=useRef<Point>({x:0,y:0})
+  const current=useRef<Point>({x:0,y:0})
+  const frame=useRef(0)
+
+  useEffect(()=>{
+    const update=()=>setTouchMode(innerWidth<768)
+    update()
+    addEventListener('resize',update)
+    return()=>removeEventListener('resize',update)
+  },[])
+
+  useEffect(()=>{
+    const follow=()=>{
+      const node=previewRef.current
+      if(node){
+        current.current.x+=(target.current.x-current.current.x)*.14
+        current.current.y+=(target.current.y-current.current.y)*.14
+        node.style.transform=`translate3d(${current.current.x}px,${current.current.y}px,0)`
+      }
+      frame.current=requestAnimationFrame(follow)
+    }
+    frame.current=requestAnimationFrame(follow)
+    return()=>cancelAnimationFrame(frame.current)
+  },[])
+
+  const placePreview=useCallback((clientX:number,clientY:number)=>{
+    if(touchMode){return}
+    const preview=previewRef.current
+    const width=preview?.offsetWidth||Math.min(Math.max(innerWidth*.25,240),420)
+    const height=preview?.offsetHeight||Math.round(width*9/16)
+    const gutter=18
+    let x=clientX+28
+    let y=clientY+22
+    if(x+width>innerWidth-gutter){x=clientX-width-28}
+    if(y+height>innerHeight-gutter){y=clientY-height-22}
+    target.current.x=Math.max(gutter,Math.min(x,innerWidth-width-gutter))
+    target.current.y=Math.max(64,Math.min(y,innerHeight-height-gutter))
+    if(current.current.x===0&&current.current.y===0){current.current={...target.current}}
+  },[touchMode])
+
+  const activateProject=(project:SpiralProject,point?:Point)=>{
+    setHoveredProject(project)
+    if(point){placePreview(point.x,point.y)}
+  }
+
+  const handleClick=(project:SpiralProject)=>{
+    if(touchMode&&hoveredProject?.id!==project.id){
+      setHoveredProject(project)
+      return
+    }
+    openProject(project)
+  }
+
+  return <section className={`spiral-project-list ${active?'is-active':''}`} aria-label="Project directory" aria-hidden={!active} onPointerMove={event=>placePreview(event.clientX,event.clientY)} onPointerLeave={()=>{if(!touchMode){setHoveredProject(null)}}}>
+    <div className="spiral-project-list-inner">
+      {spiralProjects.map(project=>{
+        const isHovered=hoveredProject?.id===project.id
+        return <button key={project.id} type="button" className={`spiral-project-list-title ${isHovered?'is-hovered':''}`} onPointerEnter={event=>{if(!touchMode){activateProject(project,{x:event.clientX,y:event.clientY})}}} onFocus={()=>activateProject(project,{x:innerWidth*.5,y:innerHeight*.58})} onClick={()=>handleClick(project)}>
+          {project.title}
+        </button>
+      })}
+    </div>
+    <div ref={previewRef} className={`spiral-project-preview ${hoveredProject?'is-visible':''}`} aria-hidden="true">
+      <AnimatePresence initial={false} mode="sync">
+        {hoveredProject&&<motion.img key={hoveredProject.cover} src={hoveredProject.cover} alt="" initial={{opacity:0,scale:.94,y:10}} animate={{opacity:1,scale:1,y:0}} exit={{opacity:0,scale:.98,y:-4}} transition={{duration:.21,ease:[.2,0,0,1]}}/>}
+      </AnimatePresence>
+    </div>
+  </section>
+}

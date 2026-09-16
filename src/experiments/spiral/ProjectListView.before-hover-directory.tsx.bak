@@ -1,0 +1,12 @@
+import {spiralProjects} from './spiralProjects'
+
+export default function ProjectListView({active}:{active:boolean}){
+  return <section className={`spiral-project-list ${active?'is-active':''}`} aria-label="作品列表" aria-hidden={!active}>
+    <div className="spiral-project-list-inner">
+      {spiralProjects.map(project=><article key={project.id} className="spiral-project-list-item">
+        <img src={project.cover} alt={`${project.title} 项目封面`}/>
+        <div><p>{project.index} / 05 · {project.year}</p><h2>{project.title}</h2><span>{project.category}</span></div>
+      </article>)}
+    </div>
+  </section>
+}

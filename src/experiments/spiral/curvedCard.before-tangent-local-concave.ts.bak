@@ -1,0 +1,34 @@
+import * as THREE from 'three'
+
+export function createCurvedPlaneGeometry(width:number,height:number,segmentsX=28,segmentsY=10,bend=.16){
+  const geometry=new THREE.PlaneGeometry(width,height,segmentsX,segmentsY)
+  const position=geometry.getAttribute('position') as THREE.BufferAttribute
+  geometry.userData.baseX=Float32Array.from({length:position.count},(_,index)=>position.getX(index))
+  geometry.userData.cardWidth=width
+  setCurvedPlaneBend(geometry,width,bend)
+  geometry.computeVertexNormals()
+  return geometry
+}
+
+export function setCurvedPlaneBend(geometry:THREE.PlaneGeometry,width:number,bend:number){
+  const position=geometry.getAttribute('position') as THREE.BufferAttribute
+  const baseX=geometry.userData.baseX as Float32Array
+  const safeBend=Math.sign(bend||1)*Math.max(Math.abs(bend),.0001)
+  const curveRadius=width/safeBend
+  for(let i=0;i<position.count;i++){
+    const theta=(baseX[i]/width)*bend
+    position.setX(i,Math.sin(theta)*curveRadius)
+    position.setZ(i,(Math.cos(theta)-1)*curveRadius)
+  }
+  position.needsUpdate=true
+  geometry.userData.bendRadians=bend
+  geometry.userData.bendUpdates=(geometry.userData.bendUpdates??0)+1
+}
+
+export function createMosaicTexture(image:CanvasImageSource,aspect:number,width=128){
+  const height=Math.max(20,Math.round(width/aspect)); const canvas=document.createElement('canvas')
+  canvas.width=width; canvas.height=height
+  const context=canvas.getContext('2d')!; context.imageSmoothingEnabled=false; context.drawImage(image,0,0,width,height)
+  const texture=new THREE.CanvasTexture(canvas); texture.magFilter=THREE.NearestFilter; texture.minFilter=THREE.NearestFilter; texture.colorSpace=THREE.SRGBColorSpace
+  return texture
+}

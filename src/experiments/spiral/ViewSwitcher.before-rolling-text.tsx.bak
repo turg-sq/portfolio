@@ -1,0 +1,21 @@
+export type ViewMode='spiral'|'list'
+
+function SplitFlipText({label,active,onClick}:{label:string;active:boolean;onClick:()=>void}){
+  return <button type="button" aria-label={label} aria-pressed={active} className={`split-flip-button ${active?'is-active':''}`} onClick={onClick}>
+    <span className="split-flip-stage">
+      <span className="split-flip-sizer" aria-hidden="true">{label}</span>
+      <span className="split-half split-top split-static-top"><span className="split-full-text">{label}</span></span>
+      <span className="split-half split-bottom split-static-bottom"><span className="split-full-text">{label}</span></span>
+      <span className="split-half split-top split-flip-out" aria-hidden="true"><span className="split-full-text">{label}</span></span>
+      <span className="split-half split-bottom split-flip-in" aria-hidden="true"><span className="split-full-text">{label}</span></span>
+    </span>
+  </button>
+}
+
+export default function ViewSwitcher({viewMode,onChange}:{viewMode:ViewMode;onChange:(mode:ViewMode)=>void}){
+  return <nav className="spiral-view-switcher" aria-label="作品浏览视图">
+    <SplitFlipText label="螺旋" active={viewMode==='spiral'} onClick={()=>onChange('spiral')}/>
+    <span className="spiral-view-switcher-dot" aria-hidden="true"/>
+    <SplitFlipText label="列表" active={viewMode==='list'} onClick={()=>onChange('list')}/>
+  </nav>
+}

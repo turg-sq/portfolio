@@ -1,0 +1,54 @@
+import {Line,ScrollControls,useScroll} from '@react-three/drei'
+import {useFrame} from '@react-three/fiber'
+import {Suspense,useMemo,useRef} from 'react'
+import * as THREE from 'three'
+import {getCardState,getHelixPoint,helix,totalAngle,wrapAngle} from './helix'
+import SpiralCard,{type HelixCardDebug} from './SpiralCard'
+import {visualSlots} from './spiralProjects'
+
+export type SpiralDebug={autoPhase:number;scrollInfluence:number;combinedPhase:number;autoSpeed:number;reducedMotion:boolean;frameloop:'always';currentProjectIndex:number;activeSlotIndex:number;candidateSlotIndex:number;currentDistance:number;candidateDistance:number;cards:HelixCardDebug[]}
+type Candidate={slotIndex:number;distance:number}
+const cameraPosition=new THREE.Vector3(0,0,7.2)
+const cardNormal=new THREE.Vector3()
+
+function getCandidate(slotIndex:number,phase:number):Candidate|null{
+  const slot=visualSlots[slotIndex]
+  if(!slot)return null
+  const card=getCardState(slotIndex,phase)
+  cardNormal.set(0,0,1).applyEuler(card.rotation).normalize()
+  const facingDot=cardNormal.dot(cameraPosition.clone().sub(card.position).normalize())
+  if(facingDot<=.25)return null
+  const angleDistance=Math.abs(wrapAngle(card.angle))
+  const verticalDistance=Math.abs(card.position.y)
+  return {slotIndex,distance:Math.hypot(angleDistance/1.1,verticalDistance/.9)}
+}
+
+function findCandidate(phase:number){return visualSlots.reduce<Candidate|null>((winner,slot)=>{const candidate=getCandidate(slot.slotIndex,phase);return candidate&&(!winner||candidate.distance<winner.distance)?candidate:winner},null)}
+function closestProject(phase:number){let winner=0;let distance=Infinity;visualSlots.forEach(slot=>{if(slot.projectIndex!==null){const candidate=getCandidate(slot.slotIndex,phase);if(candidate&&candidate.distance<distance){distance=candidate.distance;winner=slot.projectIndex}}});return winner}
+function HelixGuide(){const points=useMemo(()=>Array.from({length:160},(_,index)=>getHelixPoint(-totalAngle/2+index*(totalAngle/159)).toArray()),[]);return <group><Line points={points} color="#f3d126" lineWidth={.7} transparent opacity={.65}/><Line points={[[0,-4,0],[0,4,0]]} color="#777" lineWidth={.45} transparent opacity={.5}/></group>}
+
+function HelixContent({onProject,onDebug,reduced,showGuides}:{onProject:(index:number)=>void;onDebug?:(debug:SpiralDebug)=>void;reduced:boolean;showGuides:boolean}){
+  const scroll=useScroll(),autoPhase=useRef(0),scrollInfluence=useRef(0),combinedPhase=useRef(0),cards=useRef<Record<number,HelixCardDebug>>({}),lastDebug=useRef(0)
+  const initialCandidate=findCandidate(0)
+  const activeSlot=useRef(initialCandidate?.slotIndex??0)
+  const activeDistance=useRef(initialCandidate?.distance??Infinity)
+  const lastProject=useRef(-1)
+  useFrame((state,delta)=>{
+    const speed=reduced?.08:helix.autoSpeed
+    autoPhase.current+=delta*speed
+    const scrollTarget=scroll.offset*totalAngle
+    scrollInfluence.current=THREE.MathUtils.damp(scrollInfluence.current,scrollTarget,5,delta)
+    combinedPhase.current=autoPhase.current+scrollInfluence.current
+    const candidate=findCandidate(combinedPhase.current)
+    const current=getCandidate(activeSlot.current,combinedPhase.current)
+    const currentDistance=current?.distance??Infinity
+    if(candidate&&candidate.slotIndex!==activeSlot.current&&candidate.distance<currentDistance-.02){activeSlot.current=candidate.slotIndex;activeDistance.current=candidate.distance}else{activeDistance.current=currentDistance}
+    const activeProject=visualSlots[activeSlot.current]?.projectIndex??closestProject(combinedPhase.current)
+    if(activeProject!==lastProject.current){lastProject.current=activeProject;onProject(activeProject)}
+    if(onDebug&&state.clock.elapsedTime-lastDebug.current>.14){lastDebug.current=state.clock.elapsedTime;onDebug({autoPhase:autoPhase.current,scrollInfluence:scrollInfluence.current,combinedPhase:combinedPhase.current,autoSpeed:speed,reducedMotion:reduced,frameloop:'always',currentProjectIndex:activeProject,activeSlotIndex:activeSlot.current,candidateSlotIndex:candidate?.slotIndex??-1,currentDistance:activeDistance.current,candidateDistance:candidate?.distance??Infinity,cards:Object.values(cards.current).sort((a,b)=>a.slotIndex-b.slotIndex)})}
+  })
+  const record=(card:HelixCardDebug)=>{cards.current[card.slotIndex]=card}
+  return <group>{showGuides&&<HelixGuide/>}{visualSlots.map(slot=><SpiralCard key={slot.slotIndex} slot={slot} getPhase={()=>combinedPhase.current} getActiveSlot={()=>activeSlot.current} onDebug={showGuides?record:undefined}/>)}</group>
+}
+
+export default function SpiralScene({onProject,onDebug,reduced,showGuides=false}:{onProject:(index:number)=>void;onDebug?:(debug:SpiralDebug)=>void;reduced:boolean;showGuides?:boolean}){return <ScrollControls pages={2.5} damping={.09} distance={1}><Suspense fallback={null}><HelixContent onProject={onProject} onDebug={onDebug} reduced={reduced} showGuides={showGuides}/></Suspense></ScrollControls>}

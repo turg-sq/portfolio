@@ -1,0 +1,89 @@
+import {useTexture} from '@react-three/drei'
+import {useFrame,useThree} from '@react-three/fiber'
+import {useEffect,useLayoutEffect,useMemo,useRef,useState} from 'react'
+import * as THREE from 'three'
+import {createCurvedPlaneGeometry,createMosaicTexture,setCurvedPlaneBend} from './curvedCard'
+import {getCardState,helix} from './helix'
+import {createRoundedAlphaMask} from './roundedMask'
+import type {VisualSlot} from './spiralProjects'
+
+export type HelixCardDebug={slotIndex:number;projectIndex:number|null;projectId:string;textureUrl:string;activeSlotIndex:number;angle:number;centerDistance:number;centerProximity:number;proximityScale:number;activeBlend:number;cardMountId:string;stableKey:number;targetPosition:[number,number,number];actualWorldPosition:[number,number,number];scale:number;currentScale:number;opacity:number;currentOpacity:number;brightness:number;baseBrightness:number;proximityBrightness:number;targetBrightness:number;currentBrightness:number;facingBrightness:number;depthBrightness:number;materialBrightness:number;nearCenterDimApplied:false;uniformsShared:false;textureColorSpace:string;saturation:number;targetSaturation:number;currentSaturation:number;targetGrayscale:number;currentGrayscale:number;focusStrength:number;frontness:number;facingDot:number;frontVisible:boolean;backVisible:boolean;finalRotationY:number;cardGroupRotationY:number;frontMeshRotationY:number;backMeshRotationY:number;scaleX:number;scaleZ:number;faceState:'front'|'back';uvFlipCount:number;bendRadians:number;geometryUpdates:number;frontMaterialType:string;backMaterialType:string;mosaicWidth:number;isActive:boolean;targetScale:number;targetOpacity:number}
+
+export default function SpiralCard({slot,getPhase,getActiveSlot,onDebug}:{slot:VisualSlot;getPhase:()=>number;getActiveSlot:()=>number;onDebug?:(value:HelixCardDebug)=>void}){
+  const texture=useTexture(slot.cover) as THREE.Texture
+  const {gl}=useThree()
+  const group=useRef<THREE.Group>(null)
+  const frontMesh=useRef<THREE.Mesh>(null)
+  const backMesh=useRef<THREE.Mesh>(null)
+  const front=useRef<THREE.MeshBasicMaterial>(null)
+  const back=useRef<THREE.MeshBasicMaterial>(null)
+  const initialized=useRef(false)
+  const [hovered,setHovered]=useState(false)
+  const baseArc=.12
+  const geometry=useMemo(()=>createCurvedPlaneGeometry(helix.cardWidth,helix.cardWidth/slot.aspectRatio,64,8,baseArc),[slot.aspectRatio])
+  const mask=useMemo(()=>createRoundedAlphaMask(slot.aspectRatio),[slot.aspectRatio])
+  const mosaicWidth=128
+  const mosaic=useMemo(()=>createMosaicTexture(texture.image as CanvasImageSource,slot.aspectRatio,mosaicWidth),[texture,slot.aspectRatio])
+  const initial=useMemo(()=>getCardState(slot.slotIndex,0),[slot.slotIndex])
+  const worldPosition=useMemo(()=>new THREE.Vector3(),[])
+  const frontNormal=useMemo(()=>new THREE.Vector3(),[])
+  const toCamera=useMemo(()=>new THREE.Vector3(),[])
+  const worldQuaternion=useMemo(()=>new THREE.Quaternion(),[])
+  const lastArc=useRef(baseArc)
+  const currentBrightness=useRef(1)
+  const activeBlend=useRef(0)
+  const cardMountId=useRef(`spiral-card-${slot.slotIndex}`)
+
+  useEffect(()=>{texture.colorSpace=THREE.SRGBColorSpace;texture.magFilter=THREE.LinearFilter;texture.minFilter=THREE.LinearMipmapLinearFilter;texture.generateMipmaps=true;texture.wrapS=THREE.ClampToEdgeWrapping;texture.wrapT=THREE.ClampToEdgeWrapping;texture.anisotropy=Math.min(8,gl.capabilities.getMaxAnisotropy());texture.needsUpdate=true},[gl,texture])
+  useEffect(()=>{mosaic.wrapS=THREE.RepeatWrapping;mosaic.repeat.x=-1;mosaic.offset.x=1;mosaic.needsUpdate=true},[mosaic])
+  useEffect(()=>()=>{geometry.dispose();mask.dispose();mosaic.dispose()},[geometry,mask,mosaic])
+  const apply=(card:ReturnType<typeof getCardState>,scale=card.scale,opacity=card.opacity)=>{if(group.current){group.current.position.copy(card.position);group.current.rotation.copy(card.rotation);group.current.scale.setScalar(scale)}if(front.current)front.current.opacity=opacity;if(back.current)back.current.opacity=opacity}
+  useLayoutEffect(()=>{apply(initial)},[initial])
+
+  useFrame((state,delta)=>{
+    const target=getCardState(slot.slotIndex,getPhase())
+    const isActive=slot.slotIndex===getActiveSlot()
+    const angleDistance=Math.abs(target.angle)
+    const verticalDistance=Math.abs(target.position.y)
+    const centerDistance=Math.hypot(angleDistance/1.1,verticalDistance/.9)
+    const centerProximity=1-THREE.MathUtils.smoothstep(centerDistance,.18,1.35)
+    const proximity=THREE.MathUtils.clamp(centerProximity,0,1)
+    const proximityScale=THREE.MathUtils.lerp(.7,.96,proximity)
+    activeBlend.current=THREE.MathUtils.damp(activeBlend.current,isActive?1:0,10,delta)
+    let targetScale=THREE.MathUtils.lerp(proximityScale,1,activeBlend.current)
+    const secondaryOpacity=Math.min(THREE.MathUtils.lerp(.38,.68,target.focusStrength),.68)
+    const targetOpacity=THREE.MathUtils.lerp(secondaryOpacity,1,activeBlend.current)
+    const baseBrightness=.72
+    const proximityBrightness=THREE.MathUtils.lerp(baseBrightness,.96,centerProximity)
+    const targetBrightness=Math.max(baseBrightness,THREE.MathUtils.lerp(proximityBrightness,1,activeBlend.current))
+    const targetSaturation=1
+    const targetGrayscale=0
+    const interactive=isActive&&target.focusStrength>.5
+    const hoverFactor=hovered&&interactive?.96:1
+    if(!initialized.current){apply(target,targetScale,targetOpacity);initialized.current=true;return}
+    if(!group.current)return
+    group.current.position.lerp(target.position,Math.min(1,delta*10))
+    group.current.rotation.x=target.rotation.x
+    group.current.rotation.y=Math.atan2(target.position.x,target.position.z)
+    group.current.rotation.z=target.rotation.z
+    group.current.scale.setScalar(THREE.MathUtils.damp(group.current.scale.x,targetScale*hoverFactor,8,delta))
+    group.current.updateWorldMatrix(true,false)
+    group.current.getWorldPosition(worldPosition)
+    frontNormal.set(0,0,1).applyQuaternion(group.current.getWorldQuaternion(worldQuaternion)).normalize()
+    toCamera.copy(state.camera.position).sub(worldPosition).normalize()
+    const facingDot=frontNormal.dot(toCamera)
+    const sideFactor=1-Math.abs(facingDot)
+    const finalArc=THREE.MathUtils.lerp(baseArc,THREE.MathUtils.degToRad(20),THREE.MathUtils.smoothstep(sideFactor,.28,.88))
+    if(Math.abs(finalArc-lastArc.current)>.0005){setCurvedPlaneBend(geometry,helix.cardWidth,finalArc);lastArc.current=finalArc}
+    if(front.current)front.current.opacity=THREE.MathUtils.damp(front.current.opacity,targetOpacity,8,delta)
+    if(back.current)back.current.opacity=THREE.MathUtils.damp(back.current.opacity,targetOpacity,8,delta)
+    currentBrightness.current=THREE.MathUtils.damp(currentBrightness.current,targetBrightness,8,delta)
+    if(front.current)front.current.color.setScalar(currentBrightness.current)
+    if(onDebug)onDebug({slotIndex:slot.slotIndex,projectIndex:slot.projectIndex,projectId:slot.id,textureUrl:slot.cover,activeSlotIndex:getActiveSlot(),angle:target.angle,centerDistance,centerProximity,proximityScale,activeBlend:activeBlend.current,cardMountId:cardMountId.current,stableKey:slot.slotIndex,targetPosition:target.position.toArray(),actualWorldPosition:worldPosition.toArray(),scale:group.current.scale.x,currentScale:group.current.scale.x,opacity:front.current?.opacity??targetOpacity,currentOpacity:front.current?.opacity??targetOpacity,brightness:targetBrightness,baseBrightness,proximityBrightness,targetBrightness,currentBrightness:currentBrightness.current,facingBrightness:1,depthBrightness:1,materialBrightness:front.current?.color.r??currentBrightness.current,nearCenterDimApplied:false,uniformsShared:false,textureColorSpace:texture.colorSpace===THREE.SRGBColorSpace?'SRGBColorSpace':'other',saturation:targetSaturation,targetSaturation,currentSaturation:targetSaturation,targetGrayscale,currentGrayscale:targetGrayscale,focusStrength:target.focusStrength,frontness:target.frontness,facingDot,frontVisible:facingDot>=0,backVisible:facingDot<0,finalRotationY:target.rotation.y,cardGroupRotationY:group.current.rotation.y,frontMeshRotationY:frontMesh.current?.rotation.y??0,backMeshRotationY:backMesh.current?.rotation.y??0,scaleX:group.current.scale.x,scaleZ:group.current.scale.z,faceState:facingDot>=0?'front':'back',uvFlipCount:1,bendRadians:lastArc.current,geometryUpdates:geometry.userData.bendUpdates??0,frontMaterialType:'MeshBasicMaterial',backMaterialType:'MeshBasicMaterial',mosaicWidth,isActive,targetScale,targetOpacity})
+  })
+  const allowHover=()=>getCardState(slot.slotIndex,getPhase()).focusStrength>.5
+  return <group ref={group} position={initial.position} rotation={initial.rotation} scale={initial.scale} onPointerOver={event=>{if(allowHover()){event.stopPropagation();setHovered(true);document.body.style.cursor='pointer'}}} onPointerOut={()=>{setHovered(false);document.body.style.cursor='default'}}>
+    <mesh ref={frontMesh} geometry={geometry}><meshBasicMaterial ref={front} map={texture} alphaMap={mask} transparent opacity={initial.opacity} depthWrite={false} toneMapped={false} side={THREE.FrontSide}/></mesh>
+    <mesh ref={backMesh} geometry={geometry}><meshBasicMaterial ref={back} map={mosaic} alphaMap={mask} transparent opacity={initial.opacity} depthWrite={false} toneMapped={false} side={THREE.BackSide}/></mesh>
+  </group>
+}

@@ -1,0 +1,11 @@
+export type ViewMode='spiral'|'list'
+
+export default function ViewSwitcher({viewMode,onChange}:{viewMode:ViewMode;onChange:(mode:ViewMode)=>void}){
+  const isSpiral=viewMode==='spiral'
+  const isList=viewMode==='list'
+  return <nav className="spiral-view-switcher" aria-label="作品浏览视图">
+    <button type="button" aria-pressed={isSpiral} className={isSpiral?'is-active':''} onClick={()=>onChange('spiral')}>螺旋</button>
+    <span className="spiral-view-switcher-dot" aria-hidden="true"/>
+    <button type="button" aria-pressed={isList} className={isList?'is-active':''} onClick={()=>onChange('list')}>列表</button>
+  </nav>
+}

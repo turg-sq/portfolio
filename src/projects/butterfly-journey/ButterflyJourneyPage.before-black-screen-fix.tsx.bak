@@ -1,0 +1,28 @@
+import {motion,useReducedMotion} from 'framer-motion'
+import {useEffect} from 'react'
+import './butterfly-journey.css'
+
+const galleryImages=[
+  '01-tool-flow.png',
+  '02-nail-trends.png',
+  '03-main-visual.png',
+  '04-products.png',
+  '05-application.png',
+  '06-exhibition.png',
+]
+
+export default function ButterflyJourneyPage({onBack}:{onBack:()=>void}){
+  const reducedMotion=useReducedMotion()
+  useEffect(()=>window.scrollTo({top:0,behavior:'instant'}),[])
+  const entrance=reducedMotion?false:{opacity:0,y:20}
+  return <motion.main className="butterfly-journey-page" initial={entrance} animate={{opacity:1,y:0}} transition={{duration:.42,ease:[.22,1,.36,1]}}>
+    <button className="butterfly-journey-page__back" type="button" onClick={onBack}><span aria-hidden="true">←</span> 返回作品</button>
+    <header className="butterfly-journey-page__header">
+      <p>03 / 06</p>
+      <div><span>DATA VISUALIZATION · 2026</span><h1>《蝶变之旅》</h1><strong>美甲信息可视化设计</strong></div>
+    </header>
+    <section className="butterfly-journey-page__gallery" aria-label="《蝶变之旅》作品图集">
+      {galleryImages.map((image,index)=><motion.figure key={image} initial={reducedMotion?false:{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.12}} transition={{duration:.42,delay:reducedMotion?0:Math.min(index*.04,.18),ease:[.22,1,.36,1]}}><img src={`/assets/projects/butterfly-journey/gallery/${image}`} alt={`《蝶变之旅》作品图 ${String(index+1).padStart(2,'0')}`} loading={index===0?'eager':'lazy'}/></motion.figure>)}
+    </section>
+  </motion.main>
+}

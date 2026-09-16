@@ -130,3 +130,18 @@
     object-fit: contain;
   }
 }
+
+/* Phone layout repairs. */
+@media (max-width: 767px) {
+  .ae-live-gift-page :is(img, video, svg) { max-width: 100%; object-fit: contain; }
+  .ae-live-gift-page :is(h1, h2, h3, p, strong) { overflow-wrap: anywhere; }
+  .ae-live-gift-page :is(.ae-gift-hero, .ae-gift-section) { box-sizing: border-box; width: calc(100% - 32px); }
+  .ae-live-gift-page .ae-gift-hero h1 { font-size: clamp(40px, 11vw, 52px); line-height: 1.15; }
+  .ae-live-gift-page .ae-section-heading h2 { font-size: clamp(34px, 9vw, 42px); }
+  .ae-live-gift-page :is(.ae-gift-goal-grid, .ae-gift-process-track, .ae-gift-visual-grid, .ae-gift-motion-layout, .ae-gift-motion-pair) { grid-template-columns: minmax(0, 1fr); }
+  .ae-live-gift-page .ae-motion-showcase { padding-inline: 16px; }
+  .ae-live-gift-page .ae-motion-showcase__mobile-steps :is(article, figure) { min-width: 0; max-width: 100%; }
+  .ae-live-gift-page .ae-motion-showcase__mobile-steps h3 { font-size: clamp(30px, 8vw, 38px); line-height: 1.2; }
+  .ae-live-gift-page .ae-motion-showcase__mobile-steps img { height: auto; }
+  .ae-live-gift-page .ae-gift-next { padding: 56px 16px; }
+}

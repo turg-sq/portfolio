@@ -1,0 +1,31 @@
+import {useState} from 'react'
+import * as THREE from 'three'
+import WebGLCapabilityGate from './spiral/WebGLCapabilityGate'
+import ProjectListView from './spiral/ProjectListView'
+import SpiralOverlay from './spiral/SpiralOverlay'
+import type {SpiralDebug} from './spiral/SpiralScene'
+import ViewSwitcher,{type ViewMode} from './spiral/ViewSwitcher'
+
+const debugEnabled=import.meta.env.DEV&&new URLSearchParams(window.location.search).get('debug')==='1'
+
+export default function SpiralWorksPrototype(){
+  const [projectIndex,setProjectIndex]=useState(0)
+  const [debug,setDebug]=useState<SpiralDebug|null>(null)
+  const [viewMode,setViewMode]=useState<ViewMode>('spiral')
+  const centerCard=debug?.cards.find(card=>card.slotIndex===debug.activeSlotIndex)??null
+  const isSpiral=viewMode==='spiral'
+  return <main className="spiral-prototype-root">
+    <ViewSwitcher viewMode={viewMode} onChange={setViewMode}/>
+    <div className={`spiral-prototype-spiral-view ${isSpiral?'is-active':''}`} aria-hidden={!isSpiral}>
+      <WebGLCapabilityGate onProject={setProjectIndex} onDebug={debugEnabled?setDebug:undefined} showGuides={debugEnabled}/>
+      <SpiralOverlay index={projectIndex}/>
+      {debugEnabled&&debug&&<aside className="spiral-prototype-debug">
+        <strong>auto {debug.autoPhase.toFixed(2)} · scroll {debug.scrollInfluence.toFixed(2)} · phase {debug.combinedPhase.toFixed(2)}</strong>
+        <span>speed {debug.autoSpeed} · frame {debug.frameloop} · active #{debug.activeSlotIndex} · candidate #{debug.candidateSlotIndex} · current:{debug.currentDistance.toFixed(2)} · candidate:{debug.candidateDistance.toFixed(2)}</span>
+        {centerCard&&<span><b>ACTIVE #{centerCard.slotIndex}</b> {centerCard.projectId} · scale:{centerCard.currentScale.toFixed(2)}/{centerCard.targetScale.toFixed(2)} · opacity:{centerCard.currentOpacity.toFixed(2)}/{centerCard.targetOpacity.toFixed(2)} · brightness:{centerCard.currentBrightness.toFixed(2)}/{centerCard.targetBrightness.toFixed(2)}</span>}
+        {debug.cards.map(card=><span key={card.slotIndex}>{card.isActive?'ACTIVE':'secondary'} #{card.slotIndex} p:{String(card.projectIndex)} id:{card.projectId} dist:{card.centerDistance.toFixed(2)} f:{card.focusStrength.toFixed(2)} scale:{card.currentScale.toFixed(2)}/{card.targetScale.toFixed(2)} opacity:{card.currentOpacity.toFixed(2)}/{card.targetOpacity.toFixed(2)} bright:{card.currentBrightness.toFixed(2)}/{card.targetBrightness.toFixed(2)} sat:{card.currentSaturation.toFixed(2)}/{card.targetSaturation.toFixed(2)} gray:{card.currentGrayscale.toFixed(2)}/{card.targetGrayscale.toFixed(2)} url:{card.textureUrl}</span>)}
+      </aside>}
+    </div>
+    <ProjectListView active={!isSpiral}/>
+  </main>
+}

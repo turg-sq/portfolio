@@ -1,0 +1,23 @@
+import {useState} from 'react'
+import * as THREE from 'three'
+import WebGLCapabilityGate from './spiral/WebGLCapabilityGate'
+import SpiralOverlay from './spiral/SpiralOverlay'
+import type {SpiralDebug} from './spiral/SpiralScene'
+
+const debugEnabled=import.meta.env.DEV&&new URLSearchParams(window.location.search).get('debug')==='1'
+
+export default function SpiralWorksPrototype(){
+  const [projectIndex,setProjectIndex]=useState(0)
+  const [debug,setDebug]=useState<SpiralDebug|null>(null)
+  const centerCard=debug?.cards.find(card=>card.slotIndex===debug.activeSlotIndex)??null
+  return <main className="spiral-prototype-root">
+    <WebGLCapabilityGate onProject={setProjectIndex} onDebug={debugEnabled?setDebug:undefined} showGuides={debugEnabled}/>
+    <SpiralOverlay index={projectIndex}/>
+    {debugEnabled&&debug&&<aside className="spiral-prototype-debug">
+      <strong>auto {debug.autoPhase.toFixed(2)} · scroll {debug.scrollInfluence.toFixed(2)} · phase {debug.combinedPhase.toFixed(2)}</strong>
+      <span>speed {debug.autoSpeed} · frame {debug.frameloop} · reduced {String(debug.reducedMotion)} · active #{debug.activeSlotIndex} · candidate #{debug.candidateSlotIndex} · current:{debug.currentDistance.toFixed(2)} · candidate:{debug.candidateDistance.toFixed(2)}</span>
+      {centerCard&&<span><b>center #{centerCard.slotIndex}</b> sat:{centerCard.saturation.toFixed(2)} bright:{centerCard.brightness.toFixed(2)} bend:{THREE.MathUtils.radToDeg(centerCard.bendRadians).toFixed(1)}deg {centerCard.frontVisible?'front':centerCard.backVisible?'back':'side'} mats:{centerCard.frontMaterialType}/{centerCard.backMaterialType} geometry updates:{centerCard.geometryUpdates}</span>}
+      {debug.cards.map(card=><span key={card.slotIndex}>{card.isActive?'ACTIVE':'secondary'} #{card.slotIndex} a:{card.angle.toFixed(2)} f:{card.focusStrength.toFixed(2)} o:{card.opacity.toFixed(2)} target:{card.targetScale.toFixed(2)}/{card.targetOpacity.toFixed(2)} dot:{card.facingDot.toFixed(2)} {card.frontVisible?'front':card.backVisible?'back':'side'} bend:{THREE.MathUtils.radToDeg(card.bendRadians).toFixed(1)}° mosaic:{card.mosaicWidth}</span>)}
+    </aside>}
+  </main>
+}

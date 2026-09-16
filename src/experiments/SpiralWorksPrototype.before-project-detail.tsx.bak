@@ -1,0 +1,42 @@
+import {useState} from 'react'
+import WebGLCapabilityGate from './spiral/WebGLCapabilityGate'
+import CornerMenu from './spiral/CornerMenu'
+import ProjectListView from './spiral/ProjectListView'
+import SpiralOverlay from './spiral/SpiralOverlay'
+import type {SpiralDebug} from './spiral/SpiralScene'
+import ViewSwitcher,{type ViewMode} from './spiral/ViewSwitcher'
+
+const debugEnabled=import.meta.env.DEV&&new URLSearchParams(window.location.search).get('debug')==='1'
+
+export default function SpiralWorksPrototype(){
+  const [projectIndex,setProjectIndex]=useState(0)
+  const [debug,setDebug]=useState<SpiralDebug|null>(null)
+  const [viewMode,setViewMode]=useState<ViewMode>('spiral')
+  const centerCard=debug?.cards.find(card=>card.slotIndex===debug.activeSlotIndex)??null
+  const opacityBands=debug?.cards.length?[1,.5,0].map(target=>debug.cards.reduce((nearest,card)=>Math.abs(card.frontness-target)<Math.abs(nearest.frontness-target)?card:nearest,debug.cards[0])):null
+  const isSpiral=viewMode==='spiral'
+  return <main className="spiral-prototype-root">
+    <ViewSwitcher viewMode={viewMode} onChange={setViewMode}/>
+    <CornerMenu onWorks={()=>setViewMode('list')}/>
+    <div className={`spiral-prototype-spiral-view ${isSpiral?'is-active':''}`} aria-hidden={!isSpiral}>
+      <WebGLCapabilityGate onProject={setProjectIndex} onDebug={debugEnabled?setDebug:undefined} showGuides={debugEnabled}/>
+      <SpiralOverlay index={projectIndex}/>
+      {debugEnabled&&debug&&<aside className="spiral-prototype-debug">
+        <span>hover eligible slots: {debug.hoverEligibleSlotIds.join(', ')||'none'} 路 hovered slot: {debug.hoveredSlotId??'none'}</span>
+        <strong>auto {debug.autoPhase.toFixed(2)} · scroll {debug.scrollInfluence.toFixed(2)} · phase {debug.combinedPhase.toFixed(2)}</strong>
+        <span>speed {debug.autoSpeed} · frame {debug.frameloop} · active #{debug.activeSlotIndex} · candidate #{debug.candidateSlotIndex} · current:{debug.currentDistance.toFixed(2)} · candidate:{debug.candidateDistance.toFixed(2)}</span>
+        {centerCard&&<span><b>ACTIVE #{centerCard.slotIndex}</b> {centerCard.projectId} · distance:{centerCard.centerDistance.toFixed(2)} · proximity:{centerCard.centerProximity.toFixed(2)} · base brightness:{centerCard.baseBrightness.toFixed(2)} · proximity brightness:{centerCard.proximityBrightness.toFixed(2)} · blend:{centerCard.activeBlend.toFixed(2)} · current/target:{centerCard.currentBrightness.toFixed(2)}/{centerCard.targetBrightness.toFixed(2)} · dim:{String(centerCard.nearCenterDimApplied)}</span>}
+        {debug.cards.map(card=><span key={card.slotIndex}>{card.isActive?'ACTIVE':'secondary'} #{card.slotIndex} p:{String(card.projectIndex)} id:{card.projectId} · distance:{card.centerDistance.toFixed(2)} · proximity:{card.centerProximity.toFixed(2)} · brightness:{card.baseBrightness.toFixed(2)}→{card.proximityBrightness.toFixed(2)}→{card.targetBrightness.toFixed(2)}/{card.currentBrightness.toFixed(2)} · opacity:{card.targetOpacity.toFixed(2)}/{card.currentOpacity.toFixed(2)} · saturation:{card.targetSaturation.toFixed(2)} · grayscale:{card.targetGrayscale.toFixed(2)} · near-center dim:{String(card.nearCenterDimApplied)}</span>)}
+        {debug.cards[0]&&<span>fixed slots: width {debug.cards[0].meshWorldWidth.toFixed(2)} 路 height {debug.cards[0].meshWorldHeight.toFixed(2)} 路 angle Δ {debug.cards[0].angleDifferenceDegrees.toFixed(4)}° 路 y Δ {debug.cards[0].yDifference.toFixed(4)} 路 radius {debug.cards[0].radius.toFixed(4)} 路 scale {debug.cards[0].currentScale.toFixed(4)}</span>}
+        {debug.cards[0]&&<span>visual card: previous center width 2.70 world units 路 current width {debug.cards[0].meshWorldWidth.toFixed(2)} 路 visual scale {debug.cards[0].visualScale.toFixed(2)} 路 slots {debug.cards.length} 路 angle step {debug.cards[0].angleDifferenceDegrees.toFixed(4)}° 路 radius {debug.cards[0].radius.toFixed(4)}</span>}
+        {centerCard&&<span>center visual width: {centerCard.previousScreenWidth.toFixed(0)}px → {centerCard.screenWidth.toFixed(0)}px</span>}
+        <span>foreground edge gaps (target 20px): {debug.foregroundGaps.map(gap=>`${gap.toFixed(1)}px`).join(' · ')||'measuring'}</span>
+        {opacityBands&&<span>opacity bands — front: {opacityBands[0].currentOpacity.toFixed(2)} · side: {opacityBands[1].currentOpacity.toFixed(2)} · rear: {opacityBands[2].currentOpacity.toFixed(2)}</span>}
+        {debug.cards.map(card=><span key={`visibility-${card.slotIndex}`}>visibility #{card.slotIndex}: {String(card.cardGroupVisible)} · front/back opacity: {card.currentOpacity.toFixed(2)}/1.00 · frustum culled: {String(card.frustumCulled)} · screen Y: {card.projectedScreenY.toFixed(0)} · {card.spatialZone}</span>)}
+        <span>hovered slot: {debug.hoveredSlotId??'none'} · center/active slot: {debug.centerSlotId} · matched: {String(debug.hoveredSlotId===debug.centerSlotId)}</span>
+        {debug.cards.filter(card=>card.isPointerOver||card.isCenterCard).map(card=><span key={`hover-${card.slotIndex}`}>hover #{card.slotIndex}: pointer {String(card.isPointerOver)} · center {String(card.isCenterCard)} · active {String(card.isHoverActive)} · projected X {card.projectedScreenX.toFixed(2)} · screen Y {card.projectedScreenY.toFixed(0)}px · distance {card.screenDistance.toFixed(2)}</span>)}
+      </aside>}
+    </div>
+    <ProjectListView active={!isSpiral}/>
+  </main>
+}

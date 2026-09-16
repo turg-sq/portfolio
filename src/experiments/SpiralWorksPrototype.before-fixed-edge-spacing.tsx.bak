@@ -1,0 +1,30 @@
+import {useState} from 'react'
+import WebGLCapabilityGate from './spiral/WebGLCapabilityGate'
+import ProjectListView from './spiral/ProjectListView'
+import SpiralOverlay from './spiral/SpiralOverlay'
+import type {SpiralDebug} from './spiral/SpiralScene'
+import ViewSwitcher,{type ViewMode} from './spiral/ViewSwitcher'
+
+const debugEnabled=import.meta.env.DEV&&new URLSearchParams(window.location.search).get('debug')==='1'
+
+export default function SpiralWorksPrototype(){
+  const [projectIndex,setProjectIndex]=useState(0)
+  const [debug,setDebug]=useState<SpiralDebug|null>(null)
+  const [viewMode,setViewMode]=useState<ViewMode>('spiral')
+  const centerCard=debug?.cards.find(card=>card.slotIndex===debug.activeSlotIndex)??null
+  const isSpiral=viewMode==='spiral'
+  return <main className="spiral-prototype-root">
+    <ViewSwitcher viewMode={viewMode} onChange={setViewMode}/>
+    <div className={`spiral-prototype-spiral-view ${isSpiral?'is-active':''}`} aria-hidden={!isSpiral}>
+      <WebGLCapabilityGate onProject={setProjectIndex} onDebug={debugEnabled?setDebug:undefined} showGuides={debugEnabled}/>
+      <SpiralOverlay index={projectIndex}/>
+      {debugEnabled&&debug&&<aside className="spiral-prototype-debug">
+        <strong>auto {debug.autoPhase.toFixed(2)} · scroll {debug.scrollInfluence.toFixed(2)} · phase {debug.combinedPhase.toFixed(2)}</strong>
+        <span>speed {debug.autoSpeed} · frame {debug.frameloop} · active #{debug.activeSlotIndex} · candidate #{debug.candidateSlotIndex} · current:{debug.currentDistance.toFixed(2)} · candidate:{debug.candidateDistance.toFixed(2)}</span>
+        {centerCard&&<span><b>ACTIVE #{centerCard.slotIndex}</b> {centerCard.projectId} · distance:{centerCard.centerDistance.toFixed(2)} · proximity:{centerCard.centerProximity.toFixed(2)} · base brightness:{centerCard.baseBrightness.toFixed(2)} · proximity brightness:{centerCard.proximityBrightness.toFixed(2)} · blend:{centerCard.activeBlend.toFixed(2)} · current/target:{centerCard.currentBrightness.toFixed(2)}/{centerCard.targetBrightness.toFixed(2)} · dim:{String(centerCard.nearCenterDimApplied)}</span>}
+        {debug.cards.map(card=><span key={card.slotIndex}>{card.isActive?'ACTIVE':'secondary'} #{card.slotIndex} p:{String(card.projectIndex)} id:{card.projectId} · distance:{card.centerDistance.toFixed(2)} · proximity:{card.centerProximity.toFixed(2)} · brightness:{card.baseBrightness.toFixed(2)}→{card.proximityBrightness.toFixed(2)}→{card.targetBrightness.toFixed(2)}/{card.currentBrightness.toFixed(2)} · opacity:{card.targetOpacity.toFixed(2)}/{card.currentOpacity.toFixed(2)} · saturation:{card.targetSaturation.toFixed(2)} · grayscale:{card.targetGrayscale.toFixed(2)} · near-center dim:{String(card.nearCenterDimApplied)}</span>)}
+      </aside>}
+    </div>
+    <ProjectListView active={!isSpiral}/>
+  </main>
+}

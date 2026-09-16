@@ -1,0 +1,21 @@
+import {motion,useReducedMotion} from 'framer-motion'
+import {playUIBack} from '../lib/uiSound'
+import './contact-page.css'
+
+export default function ContactPage({onBack}:{onBack:()=>void}){
+  const reduced=useReducedMotion()
+  const enter=reduced?{duration:0}:{duration:.58,ease:[.22,1,.36,1] as const}
+  return <main className="contact-page">
+    <button className="contact-page__back" type="button" onClick={()=>{playUIBack();onBack()}}>← 返回首页</button>
+    <section className="contact-page__layout" aria-label="自我介绍">
+      <div className="contact-page__left">
+        <motion.div className="contact-page__title-block" initial={reduced?false:{opacity:0,x:-24}} animate={{opacity:1,x:0}} transition={enter}><h1>自我介绍</h1></motion.div>
+        <motion.div className="contact-page__details" initial={reduced?false:{opacity:0,y:18}} animate={{opacity:1,y:0}} transition={{...enter,delay:reduced?0:.12}}><h2>基本信息</h2><p>姓名｜苏琪琪</p><p>年龄｜21岁</p><p>求职意向｜平面设计师、UI设计师、剪辑助理</p><p>毕业院校｜中国地质大学（武汉）</p><p>常住地｜河北省石家庄市</p></motion.div>
+      </div>
+      <div className="contact-page__right">
+        <motion.img src="/assets/projects/baby-classroom/images/profile.png" alt="个人照片" initial={reduced?false:{opacity:0,scale:.985}} animate={{opacity:1,scale:1}} transition={{...enter,delay:reduced?0:.08}}/>
+        <div className="contact-page__lines" aria-hidden="true"><i/><i/><i/></div>
+      </div>
+    </section>
+  </main>
+}

@@ -35,17 +35,6 @@ function HeroBackground({ image, alt, active, reduced }: { image: string; alt: s
   </motion.div>
 }
 
-function SummaryArtwork() {
-  const reduced = useReducedMotion()
-  return <motion.div className="spring-ip-summary__artwork" initial={reduced ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .16 }} transition={{ duration: .6, ease }}><p className="spring-ip-summary__caption">CHARACTER → CAMPAIGN → DIGITAL EXPERIENCE</p><figure className="spring-ip-image spring-ip-summary__visual"><img src={asset('spring-campaign-board.png')} alt="踏春去趣野不设限春游活动视觉板" loading="lazy" decoding="async" /></figure></motion.div>
-}
-
-function SummaryMetadata() {
-  const reduced = useReducedMotion()
-  const itemTransition = (delay: number) => ({ duration: .46, delay, ease })
-  return <aside className="spring-ip-summary__metadata"><dl className="spring-ip-summary__metadata-list"><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(0)}><dt>TYPE</dt><dd>IP DESIGN</dd></motion.div><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(.075)}><dt>YEAR</dt><dd>2026</dd></motion.div><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(.15)}><dt>ROLE</dt><dd>IP视觉 / 活动视觉 / H5设计</dd></motion.div><motion.div initial={reduced ? false : { opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={itemTransition(.225)}><dt>TOOLS</dt><dd>Illustrator / Photoshop / After Effects</dd></motion.div></dl><motion.figure className="spring-ip-summary__flash-installation" initial={reduced ? false : { opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .16 }} transition={{ duration: .56, delay: .24, ease }}><img src={asset('flash-installation.png')} alt="踏春去趣野不设限快闪平面图" loading="lazy" decoding="async" /></motion.figure></aside>
-}
-
 function ScrollNarrative() {
   useLayoutEffect(() => {
     const stage = document.querySelector('.explore-route-stage')
@@ -133,11 +122,24 @@ export default function SpringIpDesignPage({ nextProject, onBack, onOpenProject 
 
     <section className="spring-ip-ip-system spring-ip-section"><div className="spring-ip-container"><div className="spring-ip-ip-system__heading"><Heading index="05 / IP VISUAL ARCHIVE" english="CHARACTER ARCHIVE" title="IP视觉陈列" /><p>Character System<br />Expression<br />Action<br />Visual Identity</p></div><div className="spring-ip-ip-system__grid spring-ip-grid"><ImageReveal src="character.png" alt="挥手的番茄IP主角色" className="is-primary" /><ImageReveal src="character2.png" alt="手持地图的番茄IP角色" className="is-map" delay={.06} /><ImageReveal src="character3.png" alt="惊讶表情的番茄IP角色" className="is-expression" delay={.12} /><aside className="spring-ip-ip-system__notes"><p>CHARACTER NOTES</p><ol><li><span>01</span>圆润比例</li><li><span>02</span>红蓝识别</li><li><span>03</span>表情变化</li><li><span>04</span>户外动作</li></ol></aside></div></div></section>
 
+    <section className="spring-ip-svg-module"><img src={asset('application-extension.svg')} alt="应用延展" /></section>
+    <section className="spring-ip-svg-module"><img src={asset('flash-design.svg')} alt="快闪设计" /></section>
     <section className="spring-ip-poster spring-ip-section"><div className="spring-ip-container spring-ip-grid"><div className="spring-ip-poster__copy"><Heading index="06 / POSTER DESIGN" english="SPRING CAMPAIGN POSTER" title="海报设计" /><p>围绕春游主题与番茄IP形象，延展出具有活动传播属性的宣传海报，强化项目整体的视觉识别与场景表达。</p></div><ImageReveal src="海报1@2x.webp" alt="踏春去趣野不设限主题海报" className="spring-ip-poster__main" /><ImageReveal src="poster-provence-red-bag.png" alt="普罗旺斯番茄小红袋海报" className="spring-ip-poster__support" delay={.08} /></div></section>
 
+    <section className="spring-ip-h5-analysis" aria-label="H5 EXPERIENCE / H5设计">
+      <div className="spring-ip-h5-analysis__inner">
+        <img className="spring-ip-h5-analysis__board" src={asset('h5-board.svg')} alt="H5活动展板" />
+        <img className="spring-ip-h5-analysis__process" src={asset('h5-process-analysis.svg')} alt="过程分析" />
+        <div className="spring-ip-h5-analysis__analysis">
+          <img src={asset('h5-splash-analysis.svg')} alt="闪屏分析页" />
+          <img src={asset('h5-detail-analysis.svg')} alt="H5局部分析" />
+        </div>
+      </div>
+    </section>
+
+    
     <section className="spring-ip-motion spring-ip-section"><div className="spring-ip-container"><Heading index="07 / MOTION" english="CHARACTER IN MOTION" title="角色动态实验" inverse /><div className="spring-ip-motion__grid"><ImageReveal src="motion-01.gif" alt="角色互动动态 GIF" /><ImageReveal src="motion-02.gif" alt="场景反馈动态 GIF" delay={.08} /></div><div className="spring-ip-motion__captions"><span>01　角色互动</span><span>02　场景反馈</span></div></div></section>
 
-    <section className="spring-ip-summary spring-ip-section"><div className="spring-ip-container spring-ip-grid"><div className="spring-ip-summary__copy"><Heading index="08 / SUMMARY" english="FROM CHARACTER TO CAMPAIGN" title="从角色到活动场景" /><p>项目围绕番茄IP形象展开，通过角色视觉、春游主题主KV、移动端H5和动态内容等形式进行延展，使角色从单一形象逐步进入更完整的活动场景与数字体验中。</p></div><SummaryArtwork /><SummaryMetadata /></div></section>
     <button className="spring-ip-next" type="button" onClick={() => onOpenProject(nextProject)}><span>NEXT PROJECT</span><strong>{nextProject.title}</strong><em>{nextProject.category} · {nextProject.year}　→</em></button>
   </main>
 }

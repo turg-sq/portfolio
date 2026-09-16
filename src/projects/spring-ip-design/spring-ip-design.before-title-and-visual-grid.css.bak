@@ -1,0 +1,11 @@
+/* Targeted desktop rules before the title and visual-grid correction. */
+@media (min-width: 900px) {
+  .spring-ip-h5__visual img { transform: scale(1.14); transform-origin: center; }
+  .spring-ip-scroll-story__campaign img { transform: translateY(-8%) scale(1.1); transform-origin: center; }
+  .spring-ip-scroll-story__campaign-copy h2 { font-size: clamp(64px, 7vw, 112px); line-height: .98; }
+}
+@media(min-width:900px){
+  .spring-ip-heading h2 { font-size: clamp(52px,5vw,92px); line-height:.95; }
+  .spring-ip-summary__visual { grid-column:5 / span 5; width:100%; max-width:none; padding:0; justify-self:stretch; }
+}
+.spring-ip-scroll-story__copy h2 { font-size:clamp(64px,7vw,112px); line-height:.98; }

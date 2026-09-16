@@ -711,7 +711,7 @@
 .spring-ip-page .explore-route-stage .spring-ip-character-hero__route-node span{font-size:13px}
 .spring-ip-page .explore-route-stage .spring-ip-character-hero__route-line{transform:scale(1.15);transform-origin:center}
 .spring-ip-page .explore-route-stage .spring-ip-character-hero__footprints img{width:21px}
-.spring-ip-ip-system{min-height:100svh;padding:0;display:grid;place-items:center;overflow:hidden}
+.spring-ip-ip-system{min-height:100svh;padding:0;display:grid;place-items:center;overflow:hidden;background:linear-gradient(to bottom,#f5f3e8 0%,#f1edde 58%,#ece7d3 100%)}
 .spring-ip-ip-system>.spring-ip-container{display:none}
 .spring-ip-ip-system:before{content:'';display:block;width:100%;height:100%;min-height:100svh;background:url('/assets/projects/su-ip-design/character-archive-02-transparent.svg') calc(50% - 10px) center/contain no-repeat;pointer-events:none}
 @media(max-width:899px){.spring-ip-ip-system{min-height:100svh}.spring-ip-ip-system:before{min-height:100svh;width:100vw}}
@@ -747,4 +747,51 @@
 /* Picnic Day label: lift this text group without changing the node or route. */
 .spring-ip-page .explore-route-stage .spring-ip-character-hero__route-node.is-picnic div {
   top: -55px;
+}
+
+.spring-ip-svg-module{width:95%;max-width:1680px;margin:clamp(72px,8vw,132px) auto;background:transparent;overflow:hidden}
+.spring-ip-ip-system + .spring-ip-svg-module{position:relative}
+.spring-ip-ip-system + .spring-ip-svg-module::before{content:'';position:absolute;z-index:0;top:calc(-1 * clamp(72px,8vw,132px));left:50%;width:100vw;height:clamp(72px,8vw,132px);transform:translateX(-50%);background:linear-gradient(to bottom,#f5f3e8 0%,#f0ecdc 58%,#e8e2ca 100%);pointer-events:none}
+.spring-ip-ip-system + .spring-ip-svg-module img{position:relative;z-index:1}
+.spring-ip-svg-module img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain;mix-blend-mode:multiply}
+.spring-ip-h5-analysis{width:100%;padding:clamp(96px,10vw,160px) 0;background:#001126}
+.spring-ip-h5-analysis__inner{width:min(94%,1680px);margin:0 auto;display:grid;gap:clamp(44px,5vw,76px)}
+.spring-ip-h5-analysis img{display:block;width:100%;height:auto;max-width:100%;object-fit:contain}
+.spring-ip-h5-analysis__board{width:100%}
+.spring-ip-h5-analysis__analysis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,2.5vw,32px);align-items:start}
+.spring-ip-h5-analysis__process{width:88%;margin-inline:auto}
+ .spring-ip-h5-analysis__analysis img{min-width:0}
+@media(max-width:899px){.spring-ip-h5-analysis{padding:72px 0}.spring-ip-h5-analysis__inner{width:calc(100% - 32px);gap:40px}.spring-ip-h5-analysis__analysis{grid-template-columns:1fr;gap:28px}.spring-ip-h5-analysis__process{width:100%}}
+@media(max-width:899px){.spring-ip-svg-module{width:calc(100% - 32px);margin:56px auto}.spring-ip-svg-module img{width:100%;height:auto}}
+
+/* Phone layout repairs. */
+@media (max-width: 767px) {
+  .spring-ip-page :is(img, video, svg) { max-width: 100%; }
+  .spring-ip-page .spring-ip-container { width: calc(100% - 32px); }
+  .spring-ip-page .spring-ip-grid { grid-template-columns: minmax(0, 1fr); }
+  .spring-ip-page .spring-ip-grid > * { grid-column: 1 / -1; grid-row: auto; min-width: 0; }
+  .spring-ip-page :is(h1, h2, h3, p, dd) { overflow-wrap: anywhere; }
+  .spring-ip-page .spring-ip-heading h2 { font-size: clamp(34px, 9vw, 42px); line-height: 1.2; }
+  .spring-ip-page .spring-ip-hero__copy { left: 16px; right: 16px; width: auto; max-width: calc(100% - 32px); bottom: 130px; }
+  .spring-ip-page .spring-ip-hero__copy h1 { font-size: clamp(38px, 11vw, 52px); line-height: 1.15; }
+  .spring-ip-page .spring-ip-hero__copy strong { display: block; white-space: normal; line-height: 1.6; }
+  .spring-ip-page .spring-ip-character-hero__inner { width: calc(100% - 32px); display: flex; flex-direction: column; gap: 32px; padding-block: 80px 48px; }
+  .spring-ip-page .spring-ip-character-hero__identity { width: 100%; min-width: 0; }
+  .spring-ip-page .spring-ip-character-hero__identity h2 { font-size: clamp(36px, 10vw, 46px); white-space: normal; }
+  .spring-ip-page .spring-ip-character-hero__display,
+  .spring-ip-page .spring-ip-character-hero__display:hover { grid-column: auto; grid-row: auto; width: 100%; max-width: 100%; height: auto; margin: 0; translate: none; transform: none; }
+  .spring-ip-page .spring-ip-character-hero__character-video { width: 100%; height: auto; object-fit: contain; }
+  .spring-ip-page .spring-ip-character-hero__glass-decor { max-width: 35%; left: auto; right: 0; }
+  .spring-ip-page .spring-ip-character-hero__route { width: 100%; overflow: visible; }
+  .spring-ip-page .explore-route-stage { display: grid; gap: 24px; width: 100%; max-width: 100%; height: auto; min-height: 0; margin: 16px 0 0; transform: none; scale: none; }
+  .spring-ip-page .explore-route-stage :is(.spring-ip-character-hero__route-line, .spring-ip-character-hero__footprints) { display: none; }
+  .spring-ip-page .explore-route-stage .spring-ip-character-hero__route-node { position: relative; inset: auto; display: grid; grid-template-columns: 88px minmax(0, 1fr); align-items: center; gap: 20px; width: 100%; height: auto; }
+  .spring-ip-page .explore-route-stage .spring-ip-character-hero__route-node img { position: static; width: 88px; height: 88px; transform: none; }
+  .spring-ip-page .explore-route-stage .spring-ip-character-hero__route-node div { position: static; white-space: normal; }
+  .spring-ip-page .spring-ip-world__scene-pair { grid-template-columns: minmax(0, 1fr); }
+  .spring-ip-page .spring-ip-world__scene-pair .spring-ip-image { height: auto; aspect-ratio: auto; }
+  .spring-ip-page .spring-ip-world__scene-pair .spring-ip-image img { height: auto; object-fit: contain !important; }
+  .spring-ip-page .spring-ip-h5__visual { min-width: 0; width: 100%; height: auto; margin: 0; }
+  .spring-ip-page .spring-ip-ip-system { min-height: 0; padding-block: 64px; }
+  .spring-ip-page .spring-ip-next { padding: 56px 16px; }
 }

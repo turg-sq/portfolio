@@ -1,0 +1,20 @@
+import {useEffect} from 'react'
+import SideNav from './components/SideNav'
+import DesignGoal from './sections/DesignGoal'
+import DesignSystem from './sections/DesignSystem'
+import Experience from './sections/Experience'
+import FinalDemo from './sections/FinalDemo'
+import Hero from './sections/Hero'
+import Motion from './sections/Motion'
+import Overview from './sections/Overview'
+import './baby-classroom.css'
+
+export default function BabyClassroomPage({onBack}:{onBack:()=>void}){
+  useEffect(()=>{
+    window.scrollTo({top:0,behavior:'instant'})
+  },[])
+  return <main className="baby-classroom-page">
+    <button className="baby-classroom-page__back" type="button" onClick={onBack}><span aria-hidden="true">←</span> 返回作品</button>
+    <SideNav /><Hero /><Overview /><DesignGoal /><Experience /><Motion /><DesignSystem /><FinalDemo />
+  </main>
+}

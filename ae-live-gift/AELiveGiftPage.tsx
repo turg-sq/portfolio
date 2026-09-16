@@ -65,7 +65,7 @@ export default function AELiveGiftPage({onBack,nextProject,onOpenProject}:AELive
       <div className="ae-gift-hero__footer-mark" aria-hidden="true"><span>2026</span><i /></div>
       <motion.div className="ae-gift-hero__copy" initial={reducedMotion?false:{opacity:0,y:22}} animate={{opacity:1,y:0}} transition={enter}>
         <span className="ae-gift-eyebrow">05 / MOTION DESIGN</span>
-        <h1>AE直播礼物设计</h1>
+        <h1><span>AE直播</span><br /><span>礼物设计</span></h1>
         <p className="ae-gift-hero__meta">Motion Design · 2026</p>
         <p className="ae-gift-hero__description">围绕直播礼物的动态反馈展开设计，通过角色、装饰元素和界面反馈的组合，使礼物在短时间内形成清晰、完整且具有氛围感的视觉呈现。</p>
       </motion.div>

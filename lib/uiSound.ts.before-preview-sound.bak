@@ -1,0 +1,20 @@
+let clickSound: HTMLAudioElement | null = null
+let backSound: HTMLAudioElement | null = null
+
+export function playUIClick() {
+  if (typeof Audio === 'undefined') return
+  clickSound ??= new Audio('/sounds/ui-click.wav')
+  clickSound.preload = 'auto'
+  clickSound.volume = .22
+  clickSound.currentTime = 0
+  void clickSound.play().catch(() => {})
+}
+
+export function playUIBack() {
+  if (typeof Audio === 'undefined') return
+  backSound ??= new Audio('/sounds/ui-back.wav')
+  backSound.preload = 'auto'
+  backSound.volume = .18
+  backSound.currentTime = 0
+  void backSound.play().catch(() => {})
+}

@@ -1,0 +1,93 @@
+import {motion,useReducedMotion} from 'framer-motion'
+import type {SpiralProject} from '../../experiments/spiral/spiralProjects'
+import './ae-live-gift.css'
+
+type AELiveGiftPageProps={onBack:()=>void;nextProject:SpiralProject;onOpenProject:(project:SpiralProject)=>void}
+
+const enter={duration:.42,ease:[.22,1,.36,1] as const}
+
+const goals=[
+  ['01','短时识别','礼物需要在较短时间内完成主体出现、信息传递和结束收回。','rose'],
+  ['02','视觉聚焦','通过层级、发光和装饰元素突出礼物主体，避免画面信息相互干扰。','orange'],
+  ['03','界面适配','动效需要适应竖屏直播界面，避免遮挡主播、评论区和主要操作区域。','violet'],
+]
+
+const processSteps=[
+  ['01','节奏设定','确定礼物出现、主体展开、停留和结束收回的整体时长。'],
+  ['02','图层拆分','将主体、装饰、文字和粒子拆分为独立图层。'],
+  ['03','动画制作','在 After Effects 中处理位移、缩放、透明度和缓动。'],
+  ['04','界面测试','放回竖屏直播界面，检查遮挡、停留时间和视觉重点。'],
+]
+
+const visualRules=[
+  ['01','发光','强化礼物出现时的视觉反馈。'],
+  ['02','粒子','补充氛围和运动方向。'],
+  ['03','层级','保证主体、文字和装饰关系清楚。'],
+  ['04','缓动','避免礼物出现和消失过于生硬。'],
+]
+
+function SectionHeading({index,english,title,inverse=false}:{index:string;english:string;title:string;inverse?:boolean}){
+  return <header className={`ae-section-heading ${inverse?'is-inverse':''}`}><span>{index}</span><div><p>{english}</p><h2>{title}</h2></div></header>
+}
+
+function MotionPreview({file,index,label,className}:{file:string;index:string;label:string;className?:string}){
+  const reducedMotion=useReducedMotion()
+  return <motion.figure className={`ae-motion-preview ${className??''}`} initial={reducedMotion?false:{opacity:0,y:28,scale:.985}} whileInView={{opacity:1,y:0,scale:1}} viewport={{once:true,amount:.12}} transition={enter}>
+    <figcaption><span>LIVE PREVIEW</span><b>{index} / 04</b></figcaption>
+    <img src={`/assets/projects/ae-live-gift/gifs/${file}`} alt={label} loading={index==='01'?'eager':'lazy'} decoding="async" />
+    <p>{label}</p>
+  </motion.figure>
+}
+
+export default function AELiveGiftPage({onBack,nextProject,onOpenProject}:AELiveGiftPageProps){
+  const reducedMotion=useReducedMotion()
+  return <main className="ae-live-gift-page">
+    <button className="ae-live-gift-page__back" type="button" onClick={onBack}><span aria-hidden="true">←</span> 返回作品</button>
+
+    <section className="ae-gift-hero">
+      <motion.div className="ae-gift-hero__copy" initial={reducedMotion?false:{opacity:0,y:22}} animate={{opacity:1,y:0}} transition={enter}>
+        <span className="ae-gift-eyebrow">05 / MOTION DESIGN</span>
+        <h1>AE直播礼物设计</h1>
+        <p className="ae-gift-hero__meta">Motion Design · 2026</p>
+        <p className="ae-gift-hero__description">围绕直播礼物的动态反馈展开设计，通过角色、装饰元素和界面反馈的组合，使礼物在短时间内形成清晰、完整且具有氛围感的视觉呈现。</p>
+      </motion.div>
+      <motion.div className="ae-gift-hero__media" initial={reducedMotion?false:{opacity:0,y:22,rotate:0}} animate={{opacity:1,y:0,rotate:1.5}} transition={{...enter,delay:.08}}>
+        <img src="/assets/projects/ae-live-gift/gifs/gift-effect-01.gif" alt="AE直播礼物主视觉动效" decoding="async" />
+      </motion.div>
+    </section>
+
+    <section className="ae-gift-goals ae-gift-section">
+      <SectionHeading index="01" english="DESIGN GOALS" title="设计目标" />
+      <div className="ae-gift-goal-grid">{goals.map(([index,title,body,tone],position)=><motion.article key={index} className={`ae-gift-goal-card is-${tone}`} initial={reducedMotion?false:{opacity:0,y:22}} whileInView={{opacity:1,y:0}} viewport={{once:true,amount:.22}} transition={{...enter,delay:position*.06}}><span>{index}</span><h3>{title}</h3><p>{body}</p><i aria-hidden="true" /></motion.article>)}</div>
+    </section>
+
+    <section className="ae-gift-process ae-gift-section">
+      <SectionHeading index="02" english="PROCESS" title="设计过程" />
+      <div className="ae-gift-process-track">{processSteps.map(([index,title,body],position)=><motion.article key={index} initial={reducedMotion?false:{opacity:0,x:22}} whileInView={{opacity:1,x:0}} viewport={{once:true,amount:.2}} transition={{...enter,delay:position*.06}}><span>{index}</span><h3>{title}</h3><p>{body}</p></motion.article>)}</div>
+    </section>
+
+    <section className="ae-gift-visual-system ae-gift-section">
+      <SectionHeading index="03" english="VISUAL SYSTEM" title="视觉系统" />
+      <div className="ae-gift-visual-grid">
+        <div className="ae-gift-colors"><p className="ae-gift-panel-label">主色</p><div className="ae-gift-swatches"><span className="is-rose">粉色</span><span className="is-orange">橙色</span><span className="is-violet">紫色</span></div><p className="ae-gift-panel-label">辅助色</p><div className="ae-gift-support-colors"><span>白色</span><span>深灰</span><span>透明黑</span></div></div>
+        <div className="ae-gift-visual-rules">{visualRules.map(([index,title,body])=><article key={index}><span>{index}</span><div><h3>{title}</h3><p>{body}</p></div></article>)}</div>
+      </div>
+    </section>
+
+    <section className="ae-gift-motion-showcase ae-gift-section">
+      <SectionHeading index="04" english="LIVE GIFT MOTION EFFECTS" title="直播礼物动效展示" inverse />
+      <div className="ae-gift-motion-layout">
+        <MotionPreview file="gift-effect-01.gif" index="01" label="图形礼物与直播界面结合" className="is-featured" />
+        <div className="ae-gift-motion-pair"><MotionPreview file="gift-effect-02.gif" index="02" label="小型互动礼物反馈" /><MotionPreview file="gift-effect-03.gif" index="03" label="角色与装饰元素组合" /></div>
+        <MotionPreview file="gift-effect-04.gif" index="04" label="大型礼物入场动效" className="is-wide" />
+      </div>
+    </section>
+
+    <section className="ae-gift-summary ae-gift-section">
+      <SectionHeading index="05" english="SUMMARY" title="项目总结" />
+      <p>本项目通过对直播礼物出现节奏、视觉层级和界面适配的整理，将静态图形转化为更具反馈感的动态内容。设计过程中重点控制主体识别、动效时长和画面遮挡，使不同礼物在保持各自特点的同时形成相对统一的视觉表现。</p>
+    </section>
+
+    <button className="ae-gift-next" type="button" onClick={()=>onOpenProject(nextProject)}><span>下一个项目</span><strong>{nextProject.index} · {nextProject.title} →</strong></button>
+  </main>
+}

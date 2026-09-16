@@ -1,0 +1,130 @@
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import './butterfly-journey.css'
+
+const ease = [.22, 1, .36, 1] as const
+const asset = (image: string) => `/assets/projects/butterfly-journey/gallery/${image}`
+
+const chapters = [
+  { id: 'butterfly-overview', label: '01  OVERVIEW' },
+  { id: 'butterfly-visual-language', label: '02  VISUAL LANGUAGE' },
+  { id: 'butterfly-design-system', label: '03  DESIGN SYSTEM' },
+  { id: 'butterfly-final-visual', label: '04  FINAL DISPLAY' },
+  { id: 'butterfly-application', label: '05  APPLICATION' },
+  { id: 'butterfly-archive', label: '06  ARCHIVE' },
+]
+
+const artworks = [
+  {
+    id: 'butterfly-visual-language',
+    image: '02-nail-trends.png',
+    eyebrow: '02 / VISUAL LANGUAGE',
+    title: '视觉语言',
+    description: '从当代美甲趋势中提取色彩、图形与东方视觉符号，建立项目的叙事语气。',
+    caption: 'FIG. 01  ·  CURRENT NAIL ART TRENDS  ·  2026',
+  },
+  {
+    id: 'butterfly-design-system',
+    image: '03-main-visual.png',
+    eyebrow: '03 / DESIGN SYSTEM',
+    title: '信息组织',
+    description: '以图形、数据与层级关系展开信息可视化主视觉，使复杂内容保持清晰的阅读节奏。',
+    caption: 'FIG. 02  ·  INFORMATION VISUAL SYSTEM',
+  },
+  {
+    id: 'butterfly-final-visual',
+    image: '04-products.png',
+    eyebrow: '04 / FINAL DISPLAY',
+    title: '最终视觉',
+    description: '作品在完整的视觉构图中收束，保留材料、色彩与叙事符号之间的关系。',
+    caption: 'FIG. 03  ·  FINAL VISUAL',
+  },
+  {
+    id: 'butterfly-application',
+    image: '05-application.png',
+    eyebrow: '05 / APPLICATION',
+    title: '应用延展',
+    description: '将主视觉系统延展至产品与应用场景，维持统一的识别与观看体验。',
+    caption: 'FIG. 04  ·  APPLICATION STUDY',
+  },
+  {
+    id: 'butterfly-archive',
+    image: '06-exhibition.png',
+    eyebrow: '06 / ARCHIVE',
+    title: '展陈归档',
+    description: '以展览目录的方式整理完整输出，呈现从研究到应用的视觉脉络。',
+    caption: 'FIG. 05  ·  EXHIBITION ARCHIVE',
+  },
+]
+
+export default function ButterflyJourneyPage({ onBack }: { onBack: () => void }) {
+  const reducedMotion = useReducedMotion()
+  const pageRef = useRef<HTMLElement>(null)
+  const [activeChapter, setActiveChapter] = useState(chapters[0].id)
+  const { scrollY } = useScroll({ container: pageRef })
+  const copyY = useTransform(scrollY, [0, 640], [0, -24])
+  const visualY = useTransform(scrollY, [0, 760], [0, -30])
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    const container = pageRef.current
+    if (!container) return
+
+    const targets = chapters
+      .map(({ id }) => container.querySelector<HTMLElement>(`#${id}`))
+      .filter((target): target is HTMLElement => Boolean(target))
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+        if (visible) setActiveChapter(visible.target.id)
+      },
+      { root: container, rootMargin: '-36% 0px -48% 0px', threshold: [0.08, .24, .5] },
+    )
+    targets.forEach((target) => observer.observe(target))
+    return () => observer.disconnect()
+  }, [])
+
+  return <main ref={pageRef} className="butterfly-journey-page">
+    <motion.button className="butterfly-journey-page__back" type="button" onClick={onBack} initial={reducedMotion ? false : { opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: .32, delay: .04, ease }}>
+      <span aria-hidden="true">←</span> 返回作品
+    </motion.button>
+
+    <section id="butterfly-overview" className="butterfly-journey-page__hero butterfly-journey-page__chapter-section" aria-labelledby="butterfly-journey-title">
+      <span className="butterfly-journey-page__hero-number" aria-hidden="true">03</span>
+      <motion.div className="butterfly-journey-page__hero-copy" initial={reducedMotion ? false : { opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .76, delay: .1, ease }} style={reducedMotion ? undefined : { y: copyY }}>
+        <p className="butterfly-journey-page__index">03 / 06</p>
+        <span className="butterfly-journey-page__category">DATA VISUALIZATION · 2026</span>
+        <h1 id="butterfly-journey-title">《蝶变之旅》</h1>
+        <strong>美甲信息可视化设计</strong>
+        <div className="butterfly-journey-page__guide" aria-label="项目视觉关键词"><i /><span>TOOL FLOW</span><span>VISUAL SYSTEM</span><span>BEAUTY CULTURE</span></div>
+      </motion.div>
+
+      <motion.figure className="butterfly-journey-page__hero-visual" initial={reducedMotion ? false : { opacity: 0, y: 54, scale: 1.02 }} animate={{ opacity: 1, y: 0, scale: 1 }} transition={{ duration: .9, delay: .3, ease }} style={reducedMotion ? undefined : { y: visualY }}>
+        <img src={asset('01-tool-flow.png')} alt="《蝶变之旅》美甲工具流程信息可视化主视觉" />
+      </motion.figure>
+
+      <nav className="butterfly-journey-page__chapter-index" aria-label="章节索引">
+        {chapters.map(({ id, label }) => <a className={activeChapter === id ? 'is-active' : ''} href={`#${id}`} key={id}>{label}<i /></a>)}
+      </nav>
+    </section>
+
+    <section className="butterfly-journey-page__gallery" aria-label="《蝶变之旅》作品图集">
+      {artworks.map((artwork, index) => {
+        const isMajor = index === 1 || index === 2
+        return <motion.figure id={artwork.id} className={`butterfly-journey-page__gallery-item is-item-${index + 2} butterfly-journey-page__chapter-section`} key={artwork.id} initial={reducedMotion ? false : { opacity: 0, y: 42 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .16 }} transition={{ duration: .78, ease }}>
+          <motion.div className="butterfly-journey-page__artwork-reveal" initial={reducedMotion || !isMajor ? false : { clipPath: 'inset(0 0 100% 0)' }} whileInView={reducedMotion || !isMajor ? undefined : { clipPath: 'inset(0 0 0% 0)' }} viewport={{ once: true, amount: .18 }} transition={{ duration: 1, delay: .12, ease }}>
+            <img src={asset(artwork.image)} alt={`《蝶变之旅》${artwork.title}`} loading="lazy" />
+          </motion.div>
+          <figcaption>
+            <span>{artwork.eyebrow}</span>
+            <strong>{artwork.title}</strong>
+            <p>{artwork.description}</p>
+            <small>{artwork.caption}</small>
+          </figcaption>
+        </motion.figure>
+      })}
+    </section>
+  </main>
+}

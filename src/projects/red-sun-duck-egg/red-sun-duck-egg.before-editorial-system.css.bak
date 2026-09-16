@@ -1,0 +1,87 @@
+.red-sun-page{--red-sun-cream:#f3ead8;--red-sun-paper:#fff9ed;--red-sun-red:#b43b2f;--red-sun-coral:#cf5b4e;--red-sun-ink:#25201c;--red-sun-gold:#bd9148;position:fixed;z-index:20;inset:0;overflow:auto;background:var(--red-sun-paper);color:var(--red-sun-ink);font-family:var(--font-body-cn)}
+.red-sun-page *{box-sizing:border-box}.red-sun-page__container,.red-sun-section>*{width:min(1440px,calc(100vw - 96px));margin-inline:auto}.red-sun-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px}.red-sun-page__back{position:fixed;z-index:200;top:24px;left:24px;display:inline-flex;align-items:center;gap:9px;min-height:46px;padding:0 18px;border:0;border-radius:999px;background:rgba(37,32,28,.9);color:#fff;font:600 15px/1 var(--font-body-cn);cursor:pointer;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background .18s ease-out,transform .18s ease-out}.red-sun-page__back>span{transition:transform .18s ease-out}.red-sun-page__back:hover{background:var(--red-sun-red)}.red-sun-page__back:hover>span{transform:translateX(-2px)}.red-sun-page__back:active{transform:scale(.97)}.red-sun-page__back:focus-visible,.red-sun-next:focus-visible{outline:3px solid var(--red-sun-gold);outline-offset:4px}
+
+.red-sun-hero{position:relative;min-height:100svh;display:grid;grid-template-columns:minmax(0,.78fr) minmax(480px,1.22fr);align-items:center;gap:clamp(34px,6vw,96px);width:min(1440px,calc(100vw - 96px));margin:0 auto;padding:124px 0 78px;overflow:hidden}.red-sun-hero:before{content:'';position:absolute;inset:0;z-index:-1;background:repeating-radial-gradient(ellipse at 88% 56%,transparent 0 18px,rgba(180,59,47,.045) 19px 20px,transparent 21px 39px),linear-gradient(120deg,#f3ead8,#fff9ed 54%,#f6e5c9)}.red-sun-hero__eyebrow,.red-sun-heading>span,.red-sun-heading p{margin:0;color:var(--red-sun-red);font:700 12px/1.25 var(--font-body-cn);letter-spacing:.14em}.red-sun-hero h1{margin:26px 0 0;font-family:var(--font-display-cn);font-size:clamp(58px,7.2vw,112px);font-weight:400;line-height:1.05;letter-spacing:.035em}.red-sun-hero__description{max-width:500px;margin:30px 0 0;font-size:18px;line-height:1.8}.red-sun-hero__tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}.red-sun-hero__tags span{padding:8px 11px;border:1px solid rgba(180,59,47,.25);border-radius:999px;color:#733229;font-size:13px}.red-sun-hero__facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px;max-width:530px;margin:46px 0 0;padding-top:18px;border-top:1px solid rgba(37,32,28,.16)}.red-sun-hero__facts div{display:grid;gap:7px}.red-sun-hero__facts dt{color:#8c6756;font-size:10px;font-weight:700;letter-spacing:.14em}.red-sun-hero__facts dd{margin:0;font-size:14px;line-height:1.45}.red-sun-hero__stage{position:relative;min-height:620px;align-self:end}.red-sun-hero__stage:after{content:'';position:absolute;right:5%;bottom:12%;width:75%;height:13%;border-radius:50%;background:rgba(99,45,32,.16);filter:blur(22px)}.red-sun-hero__bag,.red-sun-hero__box{position:absolute;display:block;max-width:none;height:auto;object-fit:contain;filter:drop-shadow(0 28px 24px rgba(69,39,28,.2))}.red-sun-hero__bag{z-index:1;top:3%;right:-7%;width:clamp(300px,31vw,560px)}.red-sun-hero__box{z-index:2;right:-9%;bottom:-7%;width:clamp(420px,42vw,760px)}
+
+.red-sun-section{width:100%;max-width:none;margin:0;padding:120px 48px}.red-sun-heading{display:grid;grid-template-columns:84px minmax(0,1fr);gap:28px;margin-bottom:48px}.red-sun-heading h2{margin:12px 0 0;font-family:var(--font-display-cn);font-size:clamp(44px,5vw,76px);font-weight:400;line-height:1.06;letter-spacing:.04em}.red-sun-heading.is-inverse>span,.red-sun-heading.is-inverse p{color:#e5c68f}.red-sun-heading.is-inverse h2{color:#fff5e8}.red-sun-image{min-width:0;margin:0;overflow:hidden;border-radius:15px}.red-sun-image img{display:block;width:100%;height:auto;object-fit:contain;border-radius:15px}
+
+.red-sun-overview{background:var(--red-sun-cream)}.red-sun-overview__grid{align-items:start}.red-sun-overview__copy{grid-column:1 / span 4}.red-sun-overview__copy .red-sun-heading{grid-template-columns:1fr;gap:0;margin-bottom:48px}.red-sun-overview__copy>p{max-width:32em;margin:0;font-size:18px;line-height:1.85}.red-sun-overview__grid>.red-sun-image{grid-column:5 / span 8}
+
+.red-sun-role{background:#fffaf0}.red-sun-role__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid rgba(37,32,28,.18)}.red-sun-role__grid article{min-height:225px;padding:26px 30px 20px;border-right:1px solid rgba(37,32,28,.14)}.red-sun-role__grid article:first-child{padding-left:0}.red-sun-role__grid article:last-child{border-right:0}.red-sun-role__grid span{display:block;color:var(--red-sun-red);font-size:14px;font-weight:700;letter-spacing:.06em}.red-sun-role__grid p{max-width:315px;margin:30px 0 0;line-height:1.8}
+
+.red-sun-packaging{background:var(--red-sun-red);color:#fff5e8}.red-sun-packaging__intro{margin-top:-20px}.red-sun-packaging__intro p{max-width:680px;margin:0;color:#f9ded4;font-size:18px;line-height:1.85}.red-sun-packaging__main{margin-top:48px}.red-sun-packaging__details{margin-top:64px;align-items:start}.red-sun-packaging__details>.red-sun-image:first-child{grid-column:1 / span 6}.red-sun-packaging__details>.red-sun-image:last-child{grid-column:7 / span 6}.red-sun-packaging__keywords{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:64px;border-top:1px solid rgba(255,245,232,.34)}.red-sun-packaging__keywords article{padding:24px 24px 0 0;border-right:1px solid rgba(255,245,232,.24)}.red-sun-packaging__keywords article:last-child{border-right:0}.red-sun-packaging__keywords span{display:block;color:#e5c68f;font-size:12px;font-weight:700;letter-spacing:.14em}.red-sun-packaging__keywords h3{margin:18px 0 0;font-family:var(--font-display-cn);font-size:28px;font-weight:400;letter-spacing:.03em}.red-sun-packaging__keywords p{max-width:300px;margin:10px 0 0;color:#f9ded4;line-height:1.75}
+
+/* The dieline becomes the single, full-width secondary packaging visual. */
+.red-sun-packaging__details>.red-sun-packaging__dieline{grid-column:1 / -1;width:100%;max-width:none}
+
+.red-sun-product-display{background:#f4efe6}.red-sun-product-display__image{margin-bottom:0;overflow:hidden;border-radius:15px}.red-sun-product-display__image img{display:block;width:100%;height:auto;object-fit:contain}
+
+.red-sun-festival{background:#c9c4af}.red-sun-festival__intro{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;margin-bottom:48px}.red-sun-festival__intro h3{grid-column:1 / span 6;margin:0;font-family:var(--font-display-cn);font-size:clamp(32px,4vw,56px);font-weight:400;letter-spacing:.03em}.red-sun-festival__intro p{grid-column:8 / span 5;max-width:440px;margin:0;line-height:1.8}.red-sun-festival__gallery{align-items:start}.red-sun-festival__gallery .is-green{grid-column:1 / span 6}.red-sun-festival__gallery .is-orange{grid-column:7 / span 6}.red-sun-festival__gallery .red-sun-image{width:100%;transform:none}
+
+.red-sun-brand-story{background:var(--red-sun-paper)}.red-sun-brand-story__layout{align-items:start}.red-sun-brand-story aside{grid-column:1 / span 4;position:sticky;top:120px;align-self:start;height:fit-content}.red-sun-brand-story .red-sun-heading{grid-template-columns:1fr;gap:0}.red-sun-brand-story ul{display:flex;flex-wrap:wrap;gap:9px;margin:34px 0 0;padding:0;list-style:none}.red-sun-brand-story li{padding:8px 11px;border:1px solid rgba(180,59,47,.26);border-radius:999px;color:#7b372e;font-size:13px}.red-sun-brand-story__layout>.red-sun-image{grid-column:5 / span 8}
+
+.red-sun-identity{background:#f2e7d6}.red-sun-identity__grid{row-gap:64px}.red-sun-identity__logo{grid-column:2 / span 10}.red-sun-identity__story{grid-column:1 / -1;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;row-gap:64px}.red-sun-identity__story>p{grid-column:2 / span 10;max-width:680px;margin:0;font-size:18px;line-height:1.85}.red-sun-identity__story>.red-sun-image{grid-column:2 / span 10}
+
+.red-sun-application{background:#e8e5dd}.red-sun-application__gallery{row-gap:64px}.red-sun-application__gallery .is-primary,.red-sun-application__gallery .is-secondary{grid-column:2 / span 10}.red-sun-summary{padding-bottom:120px;background:var(--red-sun-paper)}.red-sun-summary>p{max-width:680px;margin:0 0 0 calc((100% + 24px) / 12 + 24px);font-size:18px;line-height:1.85}.red-sun-next{display:grid;gap:11px;width:100%;padding:120px max(48px,calc((100vw - 1440px) / 2 + 48px));border:0;background:#25201c;color:#fff9ed;text-align:left;cursor:pointer}.red-sun-next span{color:#d6b77c;font-size:12px;font-weight:700;letter-spacing:.14em}.red-sun-next strong{font-family:var(--font-display-cn);font-size:clamp(36px,5vw,76px);font-weight:400;line-height:1.06;letter-spacing:.035em}
+
+@media(max-width:899px){.red-sun-page__container,.red-sun-section>*,.red-sun-hero{width:calc(100vw - 32px)}.red-sun-page__back{top:max(14px,env(safe-area-inset-top));left:14px;min-height:44px;padding:0 16px}.red-sun-hero{grid-template-columns:1fr;gap:26px;min-height:auto;padding:104px 0 42px}.red-sun-hero__description,.red-sun-overview__copy>p,.red-sun-identity__story>p{font-size:16px}.red-sun-hero__stage{min-height:380px;order:2}.red-sun-hero__bag{top:0;right:-10%;width:min(112%,410px)}.red-sun-hero__box{right:-12%;bottom:-9%;width:min(128%,520px)}.red-sun-hero__facts{gap:16px;margin-top:32px}.red-sun-section{padding:72px 16px}.red-sun-grid{display:grid;grid-template-columns:1fr;gap:32px}.red-sun-heading{grid-template-columns:1fr;gap:13px;margin-bottom:32px}.red-sun-heading h2{font-size:46px}.red-sun-overview__copy,.red-sun-overview__grid>.red-sun-image,.red-sun-packaging__details>.red-sun-image,.red-sun-festival__gallery .is-green,.red-sun-festival__gallery .is-orange,.red-sun-brand-story aside,.red-sun-brand-story__layout>.red-sun-image,.red-sun-identity__logo,.red-sun-identity__story,.red-sun-application__gallery .is-primary,.red-sun-application__gallery .is-secondary{grid-column:auto}.red-sun-overview__copy .red-sun-heading{margin-bottom:32px}.red-sun-role__grid{grid-template-columns:1fr}.red-sun-role__grid article,.red-sun-role__grid article:first-child{min-height:0;padding:22px 0;border-right:0;border-bottom:1px solid rgba(37,32,28,.14)}.red-sun-role__grid article:last-child{border-bottom:0}.red-sun-role__grid p{margin-top:13px}.red-sun-packaging__intro{margin-top:0}.red-sun-packaging__intro p{font-size:16px}.red-sun-packaging__main{margin-top:32px}.red-sun-packaging__details{margin-top:48px;gap:24px}.red-sun-packaging__keywords{grid-template-columns:1fr;gap:0;margin-top:48px}.red-sun-packaging__keywords article{padding:22px 0;border-right:0;border-bottom:1px solid rgba(255,245,232,.24)}.red-sun-packaging__keywords article:last-child{border-bottom:0}.red-sun-festival__intro{display:grid;grid-template-columns:1fr;gap:18px;margin-bottom:32px}.red-sun-festival__intro h3,.red-sun-festival__intro p{grid-column:auto}.red-sun-festival__gallery{gap:16px}.red-sun-brand-story aside{position:static}.red-sun-brand-story__layout{gap:32px}.red-sun-identity__grid{gap:64px}.red-sun-identity__story{display:grid;grid-template-columns:1fr;gap:24px}.red-sun-identity__story>p,.red-sun-identity__story>.red-sun-image{grid-column:auto}.red-sun-application__gallery{gap:64px}.red-sun-summary>p{margin-left:0;font-size:16px}.red-sun-next{padding:72px 16px}}
+
+/* Hero: one complete product image, balanced against the project information. */
+.red-sun-hero{grid-template-columns:minmax(0,45fr) minmax(0,55fr);gap:clamp(32px,4vw,72px)}
+.red-sun-hero:before{opacity:.2}
+.red-sun-hero h1{margin-top:26px;font-size:clamp(64px,6.6vw,108px);line-height:1;letter-spacing:.03em;white-space:nowrap}
+.red-sun-hero__description{margin-top:50px}
+.red-sun-hero__tags{margin-top:32px}
+.red-sun-hero__facts{margin-top:80px}
+.red-sun-hero__stage{display:grid;min-height:clamp(580px,46vw,720px);place-items:center;align-self:stretch}
+.red-sun-hero__stage:after{right:12%;bottom:11%;width:72%;height:12%}
+.red-sun-hero__product{position:relative;z-index:2;display:block;width:min(650px,45vw);height:auto;max-width:100%;object-fit:contain;filter:drop-shadow(0 30px 26px rgba(69,39,28,.2))}
+
+@media(max-width:899px){
+  .red-sun-hero{grid-template-columns:1fr;gap:26px}
+  .red-sun-hero h1{font-size:clamp(58px,15vw,82px);line-height:1.02;white-space:normal}
+  .red-sun-hero__description{margin-top:40px}
+  .red-sun-hero__tags{margin-top:32px}
+  .red-sun-hero__facts{margin-top:48px}
+  .red-sun-hero__stage{min-height:clamp(340px,76vw,520px);place-items:center}
+  .red-sun-hero__product{width:min(100%,520px)}
+}
+
+/* Hero-only refresh: a complete packaging system sits in its own protected right column. */
+.red-sun-hero{grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;gap:0;background-image:linear-gradient(rgba(255,249,237,.78),rgba(255,249,237,.78)),url('/assets/projects/red-sun-duck-egg/底图.png');background-repeat:repeat;background-size:auto,640px auto}
+.red-sun-hero:before{background:linear-gradient(115deg,rgba(243,234,216,.84),rgba(255,249,237,.56) 55%,rgba(246,229,201,.44));opacity:1}
+.red-sun-hero__copy{grid-column:1 / span 5;position:relative;z-index:1;min-width:0;padding-right:clamp(16px,2vw,32px)}
+.red-sun-hero__stage{grid-column:6 / span 7;position:relative;z-index:1;min-width:0;min-height:clamp(560px,44vw,700px);display:grid;place-items:center;overflow:visible}
+.red-sun-hero__stage:after{right:12%;bottom:12%;width:72%;height:11%;background:rgba(99,45,32,.12);filter:blur(26px)}
+.red-sun-hero__product{content:url('/assets/projects/red-sun-duck-egg/wuti.png');width:100%;max-width:760px;height:auto;object-fit:contain;filter:drop-shadow(0 24px 26px rgba(69,39,28,.16))}
+
+@media(max-width:899px){
+  .red-sun-hero{display:grid;grid-template-columns:1fr;column-gap:0;gap:26px;background-size:auto,440px auto}
+  .red-sun-hero__copy,.red-sun-hero__stage{grid-column:auto;padding-right:0}
+  .red-sun-hero__stage{min-height:clamp(340px,76vw,520px)}
+  .red-sun-hero__product{width:min(100%,620px)}
+}
+
+/* Keep the supplied water-pattern artwork visible; no opaque wash sits above it. */
+.red-sun-hero{background-color:#fff9ed;background-image:url('/assets/projects/red-sun-duck-egg/底图.png');background-repeat:repeat;background-size:620px auto}
+.red-sun-hero:before{background:none}
+
+@media(max-width:899px){.red-sun-hero{background-size:440px auto}}
+
+/* Requested hero visual scale: 1.5×, clipped only by its own right-hand grid area. */
+@media(min-width:900px){
+  .red-sun-hero__stage{
+    grid-column:7 / 13;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:visible;
+  }
+  .red-sun-hero__product{
+    width:clamp(560px,45vw,760px);
+    max-width:100%;
+    height:auto;
+    object-fit:contain;
+    justify-self:auto;
+  }
+}

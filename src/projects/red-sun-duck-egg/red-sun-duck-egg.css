@@ -502,3 +502,24 @@
 
 @media(min-width:900px){.red-sun-identity .red-sun-identity__brand-system{grid-column:1 / -1}}
 @media(max-width:899px){.red-sun-identity__brand-system-display{grid-template-columns:1fr;gap:28px}.red-sun-identity .brand-identity-flash-image{width:min(100%,560px);justify-self:center}}
+
+/* Phone layout repairs. */
+@media (max-width: 767px) {
+  .red-sun-page :is(img, video, svg) { max-width: 100%; object-fit: contain; }
+  .red-sun-page .red-sun-hero :is(img, video) { object-fit: cover; }
+  .red-sun-page .red-sun-section { padding-inline: 16px; }
+  .red-sun-page .red-sun-section > * { width: 100%; max-width: 100%; margin-inline: 0; }
+  .red-sun-page .red-sun-grid,
+  .red-sun-page .red-sun-overview__grid.red-sun-grid,
+  .red-sun-page .red-sun-packaging__keywords { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .red-sun-page .red-sun-grid > * { grid-column: 1 / -1; grid-row: auto; min-width: 0; width: 100%; max-width: 100%; }
+  .red-sun-page .red-sun-brand-story aside { position: static; }
+  .red-sun-page :is(h1, h2, h3, p, strong, dd) { overflow-wrap: anywhere; }
+  .red-sun-page .red-sun-heading h2 { font-size: clamp(32px, 9vw, 40px); line-height: 1.2; }
+  .red-sun-page .red-sun-packaging__details > .red-sun-image img { height: auto; }
+  .red-sun-page .red-sun-packaging__keywords article { padding: 20px 0; border-right: 0; }
+  .red-sun-page .red-sun-hero__copy, .red-sun-page .red-sun-hero__footer { width: calc(100% - 32px); }
+  .red-sun-page .red-sun-hero-title > span { white-space: normal; }
+  .red-sun-page .red-sun-next { padding: 56px 16px; }
+  .red-sun-page .red-sun-next strong { font-size: 30px; line-height: 1.25; }
+}

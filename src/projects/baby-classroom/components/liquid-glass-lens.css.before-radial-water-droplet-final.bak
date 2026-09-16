@@ -1,0 +1,20 @@
+.liquid-glass-lens{display:none}
+
+@media (min-width:1024px) and (hover:hover) and (pointer:fine){
+  .liquid-glass-lens{position:absolute;z-index:8;inset:0;display:block;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .16s ease-out}
+  .liquid-glass-lens[data-active="true"]{opacity:1}
+  .liquid-glass-lens[data-mode="blank"]{opacity:.12}
+  .liquid-glass-lens[data-mode="visual"]{opacity:.54}
+  .liquid-glass-lens[data-mode="title"]{opacity:.72}
+  .liquid-glass-lens__defs{position:absolute;width:0;height:0;overflow:hidden}
+  .liquid-glass-lens__body{position:absolute;left:0;top:0;width:200px;height:185px;overflow:hidden;border-radius:51% 47% 53% 48% / 48% 53% 47% 52%;background:rgba(255,255,255,.018);box-shadow:inset 2px 2px 12px rgba(255,255,255,.09),inset -4px -5px 14px rgba(105,177,228,.025);will-change:transform;contain:paint}
+  .liquid-glass-lens__body:after{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(circle at 32% 24%,rgba(255,255,255,.055),transparent 30%),radial-gradient(circle at 72% 82%,rgba(83,190,255,.022),transparent 44%);mix-blend-mode:screen;pointer-events:none}
+  .liquid-glass-lens__scene{position:absolute;inset:0;width:max-content;height:max-content;will-change:transform;pointer-events:none}
+  .liquid-glass-lens__scene>.hero{position:relative;min-height:100%;overflow:hidden;pointer-events:none}
+  .liquid-glass-lens__scene--edge{mask-image:radial-gradient(ellipse at center,transparent 0 55%,rgba(0,0,0,.14) 67%,#000 84%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse at center,transparent 0 55%,rgba(0,0,0,.14) 67%,#000 84%,transparent 100%);opacity:.58}
+  .liquid-glass-lens__scene--cyan{mask-image:radial-gradient(ellipse at center,transparent 0 67%,#000 84%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse at center,transparent 0 67%,#000 84%,transparent 100%);opacity:.032;mix-blend-mode:screen;margin-left:1px}
+  .liquid-glass-lens__scene--warm{mask-image:radial-gradient(ellipse at center,transparent 0 67%,#000 84%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse at center,transparent 0 67%,#000 84%,transparent 100%);opacity:.024;mix-blend-mode:multiply;margin-left:-1px}
+  .liquid-glass-lens__specular{position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 18px rgba(255,255,255,.025);pointer-events:none}
+}
+
+@media (max-width:1023px), (hover:none), (pointer:coarse), (prefers-reduced-motion:reduce){.liquid-glass-lens{display:none!important}}

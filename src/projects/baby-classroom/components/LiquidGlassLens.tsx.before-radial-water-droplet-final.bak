@@ -1,0 +1,156 @@
+import { useEffect, useId, useRef } from 'react'
+import type { RefObject } from 'react'
+import './liquid-glass-lens.css'
+
+type Props = {
+  heroRef: RefObject<HTMLElement | null>
+  titleRef: RefObject<HTMLElement | null>
+  visualRef: RefObject<HTMLElement | null>
+}
+
+const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max)
+
+export default function LiquidGlassLens({ heroRef, titleRef, visualRef }: Props) {
+  const rootRef = useRef<HTMLDivElement>(null)
+  const lensRef = useRef<HTMLDivElement>(null)
+  const baseRef = useRef<HTMLDivElement>(null)
+  const edgeRef = useRef<HTMLDivElement>(null)
+  const cyanRef = useRef<HTMLDivElement>(null)
+  const warmRef = useRef<HTMLDivElement>(null)
+  const id = useId().replace(/:/g, '')
+
+  useEffect(() => {
+    const hero = heroRef.current
+    const root = rootRef.current
+    const lens = lensRef.current
+    const base = baseRef.current
+    const edge = edgeRef.current
+    const cyan = cyanRef.current
+    const warm = warmRef.current
+    if (!hero || !root || !lens || !base || !edge || !cyan || !warm) return
+
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)')
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    if (!finePointer.matches || reducedMotion.matches || window.innerWidth < 1024) return
+
+    const layers = [base, edge, cyan, warm]
+    const halfWidth = 100
+    const halfHeight = 92.5
+    let frame = 0
+    let running = false
+    let visible = true
+    let mode: 'blank' | 'title' | 'visual' = 'blank'
+    let targetX = 0
+    let targetY = 0
+    let currentX = 0
+    let currentY = 0
+    let previousX = 0
+    let previousY = 0
+    let previousTime = performance.now()
+
+    const setMode = (nextMode: typeof mode) => {
+      if (mode === nextMode && edge.style.filter) return
+      mode = nextMode
+      root.dataset.mode = mode
+      const filter = mode === 'title' ? id + '-strong' : mode === 'visual' ? id + '-soft' : id + '-calm'
+      edge.style.filter = `url(#${filter})`
+      cyan.style.filter = `url(#${filter}) saturate(1.12) hue-rotate(158deg)`
+      warm.style.filter = `url(#${filter}) sepia(.16) saturate(1.2) hue-rotate(330deg)`
+    }
+
+    const cloneScene = () => {
+      const source = hero.cloneNode(true) as HTMLElement
+      source.querySelectorAll('[data-liquid-glass-lens]').forEach((element) => element.remove())
+      source.querySelectorAll('[id]').forEach((element) => element.removeAttribute('id'))
+      source.querySelectorAll('a,button,input,select,textarea').forEach((element) => {
+        element.setAttribute('tabindex', '-1')
+        element.setAttribute('aria-hidden', 'true')
+      })
+      source.setAttribute('aria-hidden', 'true')
+      source.style.width = `${hero.clientWidth}px`
+      source.style.height = `${hero.clientHeight}px`
+      layers.forEach((layer) => {
+        layer.replaceChildren(source.cloneNode(true))
+      })
+    }
+
+    const stop = () => {
+      running = false
+      root.dataset.active = 'false'
+      if (frame) cancelAnimationFrame(frame)
+      frame = 0
+    }
+
+    const tick = (time: number) => {
+      if (!running || !visible) return
+      const elapsed = Math.max(1, time - previousTime)
+      currentX += (targetX - currentX) * .18
+      currentY += (targetY - currentY) * .18
+      const velocityX = (currentX - previousX) / elapsed
+      const velocityY = (currentY - previousY) / elapsed
+      previousX = currentX
+      previousY = currentY
+      previousTime = time
+
+      const horizontal = clamp(Math.abs(velocityX) * .03, 0, .04)
+      const vertical = clamp(Math.abs(velocityY) * .03, 0, .035)
+      const scaleX = 1 + horizontal - vertical * .22
+      const scaleY = 1 + vertical - horizontal * .38
+      const rotation = clamp(velocityX * .95, -1.5, 1.5)
+      const offsetX = halfWidth - currentX
+      const offsetY = halfHeight - currentY
+
+      lens.style.transform = `translate3d(${currentX - halfWidth}px, ${currentY - halfHeight}px, 0) rotate(${rotation}deg) scale(${scaleX}, ${scaleY})`
+      layers.forEach((layer) => {
+        layer.style.transform = `translate3d(${offsetX}px, ${offsetY}px, 0)`
+      })
+      frame = requestAnimationFrame(tick)
+    }
+
+    const inBounds = (element: HTMLElement | null, clientX: number, clientY: number) => {
+      if (!element) return false
+      const rect = element.getBoundingClientRect()
+      return clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom
+    }
+
+    const onEnter = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse' || !visible) return
+      const rect = hero.getBoundingClientRect()
+      targetX = currentX = previousX = event.clientX - rect.left
+      targetY = currentY = previousY = event.clientY - rect.top
+      previousTime = performance.now()
+      cloneScene()
+      root.dataset.active = 'true'
+      setMode(inBounds(titleRef.current, event.clientX, event.clientY) ? 'title' : inBounds(visualRef.current, event.clientX, event.clientY) ? 'visual' : 'blank')
+      running = true
+      if (!frame) frame = requestAnimationFrame(tick)
+    }
+
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse' || !running) return
+      const rect = hero.getBoundingClientRect()
+      targetX = event.clientX - rect.left
+      targetY = event.clientY - rect.top
+      setMode(inBounds(titleRef.current, event.clientX, event.clientY) ? 'title' : inBounds(visualRef.current, event.clientX, event.clientY) ? 'visual' : 'blank')
+    }
+
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      if (!visible) stop()
+    }, { threshold: .08 })
+    observer.observe(hero)
+    hero.addEventListener('pointerenter', onEnter)
+    hero.addEventListener('pointermove', onMove)
+    hero.addEventListener('pointerleave', stop)
+
+    return () => {
+      stop()
+      observer.disconnect()
+      hero.removeEventListener('pointerenter', onEnter)
+      hero.removeEventListener('pointermove', onMove)
+      hero.removeEventListener('pointerleave', stop)
+    }
+  }, [heroRef, id, titleRef, visualRef])
+
+  return <div ref={rootRef} className="liquid-glass-lens" data-liquid-glass-lens data-active="false" data-mode="blank" aria-hidden="true"><svg className="liquid-glass-lens__defs" aria-hidden="true"><defs><filter id={`${id}-calm`} x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency=".008 .012" numOctaves="1" seed="8" result="noise" /><feDisplacementMap in="SourceGraphic" in2="noise" scale="8" xChannelSelector="R" yChannelSelector="G" /></filter><filter id={`${id}-soft`} x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency=".01 .014" numOctaves="1" seed="11" result="noise" /><feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G" /></filter><filter id={`${id}-strong`} x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency=".012 .016" numOctaves="2" seed="14" result="noise" /><feDisplacementMap in="SourceGraphic" in2="noise" scale="16" xChannelSelector="R" yChannelSelector="G" /></filter></defs></svg><div ref={lensRef} className="liquid-glass-lens__body"><div ref={baseRef} className="liquid-glass-lens__scene liquid-glass-lens__scene--base" /><div ref={edgeRef} className="liquid-glass-lens__scene liquid-glass-lens__scene--edge" /><div ref={cyanRef} className="liquid-glass-lens__scene liquid-glass-lens__scene--cyan" /><div ref={warmRef} className="liquid-glass-lens__scene liquid-glass-lens__scene--warm" /><i className="liquid-glass-lens__specular" /></div></div>
+}

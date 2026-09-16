@@ -1,0 +1,35 @@
+import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { useRef, useState } from 'react'
+import MediaPreview from '../components/MediaPreview'
+import { Reveal } from '../components/Reveal'
+const steps = [
+  { title: '学习入口', text: '从首页进入清晰的学习旅程。', src: 'motion-home.gif', alt: '宝宝小课堂学习首页' },
+  { title: '学习过程', text: '用路径串联内容与连续探索。', src: 'motion-map.gif', alt: '宝宝小课堂学习地图' },
+  { title: '成长反馈', text: '以可理解的视觉线索提示进度。', src: 'profile.png', alt: '宝宝小课堂成长记录' },
+]
+
+export default function Experience() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const storyRef = useRef<HTMLDivElement>(null)
+  const [active, setActive] = useState(0)
+  const [preview, setPreview] = useState<{ type: 'image'; src: string; title: string } | null>(null)
+  const reduced = useReducedMotion()
+  const { scrollYProgress } = useScroll({ target: storyRef, offset: ['start start', 'end end'] })
+  const progress = useTransform(scrollYProgress, [0, 1], [0, 1])
+  const asset = (name: string) => `/assets/projects/baby-classroom/images/${name}`
+  const current = steps[active]
+  useMotionValueEvent(scrollYProgress, 'change', value => setActive(value < .33 ? 0 : value < .66 ? 1 : 2))
+
+  return <section ref={sectionRef} id="experience" className="experience section">
+    <div className="content experience-inner">
+      <div className="experience-intro"><Reveal><p className="eyebrow">03 / APP EXPERIENCE</p></Reveal><div className="experience-title-wrap"><h2 className="experience-title">探索式<span>学习体验</span></h2></div><p className="body-copy">从进入应用到完成一次学习，每个页面都保持轻松、清晰与积极的节奏。</p></div>
+      <div ref={storyRef} className="experience-story">
+        <div className="experience-sticky">
+          <div className="map-steps"><div className="map-progress" aria-hidden="true"><i /><motion.i className="map-progress__active" style={reduced ? undefined : { scaleY: progress }} /></div>{steps.map((step, index) => <motion.article key={step.title} className={active === index ? 'active' : ''} aria-current={active === index ? 'step' : undefined} initial={false} animate={{ opacity: active === index ? 1 : .28, x: active === index ? 6 : 0 }} transition={{ duration: .36, ease: [0.22, 1, .36, 1] }}><span>0{index + 1}</span><h3>{step.title}</h3><p>{step.text}</p>{index === 1 && <button className="map-preview-button" type="button" onClick={() => setPreview({ type: 'image', src: asset('map.png'), title: '宝宝小课堂完整学习地图' })}>查看完整学习地图 <b>→</b></button>}<div className="experience-mobile-media"><img src={asset(step.src)} alt={step.alt} /></div></motion.article>)}</div>
+          <aside className="map-stage" aria-live="polite"><AnimatePresence mode="sync" initial={false}><motion.img key={current.src} src={asset(current.src)} alt={current.alt} initial={reduced ? false : { opacity: 0, scale: 1.012 }} animate={{ opacity: 1, scale: 1 }} exit={reduced ? undefined : { opacity: 0, scale: .985 }} transition={{ duration: .46, ease: [0.22, 1, .36, 1] }} /></AnimatePresence></aside>
+        </div>
+      </div>
+    </div>
+    <MediaPreview preview={preview} onClose={() => setPreview(null)} />
+  </section>
+}

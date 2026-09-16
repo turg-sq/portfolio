@@ -1,0 +1,22 @@
+import { motion } from 'framer-motion'
+import { Reveal, TitleReveal } from '../components/Reveal'
+
+type Goal = {
+  number: string
+  title: string
+  description: string
+  visual: string
+  alt: string
+  secondaryVisual?: string
+  secondaryAlt?: string
+  tone: 'learning' | 'companion' | 'feedback' | 'friendly'
+}
+
+const goals: Goal[] = [
+  { number: '01', title: '趣味学习', description: '用可探索的内容，让学习自然发生。', visual: '/assets/projects/baby-classroom/images/Frame 33897.png', alt: '趣味学习入口界面', tone: 'learning' },
+  { number: '02', title: 'IP陪伴', description: '温暖的熊猫伙伴，陪孩子每一步成长。', visual: '/assets/projects/baby-classroom/images/熊猫旁png 2.png', alt: '熊猫陪伴角色', tone: 'companion' },
+  { number: '03', title: '游戏反馈', description: '即时的鼓励，建立持续学习动力。', visual: '/assets/projects/baby-classroom/images/motion-feedback.gif', alt: '闯关进度与奖励反馈界面', secondaryVisual: '/assets/projects/baby-classroom/images/profile.png', secondaryAlt: '学习成长记录界面', tone: 'feedback' },
+  { number: '04', title: '儿童友好', description: '更大、更清晰、更容易理解的界面。', visual: '/assets/projects/baby-classroom/images/quiz.png', alt: '儿童友好大按钮界面', secondaryVisual: '/assets/projects/baby-classroom/images/Frame 33897.png', secondaryAlt: '儿童学习入口模块', tone: 'friendly' },
+]
+
+export default function DesignGoal() { return <section id="goals" className="goals section"><div className="content goals-content"><header className="goals-header"><div><Reveal><p className="eyebrow">02 / DESIGN GOALS</p></Reveal><TitleReveal><h2>设计目标</h2></TitleReveal></div><Reveal delay={.1}><p>围绕儿童真实使用感受，建立四项核心体验原则。</p></Reveal></header><div className="goal-grid">{goals.map((goal, index) => <motion.article key={goal.number} className={`goal-card goal-card--${goal.tone}`} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: .2 }} transition={{ delay: index * .08, duration: .48, ease: [0.22, 1, 0.36, 1] }}><div className="goal-copy"><span className="goal-number">{goal.number}</span><h3>{goal.title}</h3><p>{goal.description}</p></div><div className="goal-proof"><img className="goal-proof__primary" src={goal.visual} alt={goal.alt} />{goal.secondaryVisual && <img className="goal-proof__secondary" src={goal.secondaryVisual} alt={goal.secondaryAlt} />}</div></motion.article>)}</div></div></section> }

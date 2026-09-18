@@ -61,6 +61,6 @@ export default function BabyClassroomPage({onBack}:{onBack:()=>void}){
       }
     `}</style>
     <button className="baby-classroom-page__back" type="button" onClick={onBack}><span aria-hidden="true">←</span> 返回作品</button>
-    <SideNav /><Hero /><Overview /><DesignGoal /><Experience /><Motion /><DesignSystem /><FinalDemo />
+    <SideNav /><Hero /><Overview /><DesignGoal /><DesignSystem /><Experience /><Motion /><FinalDemo />
   </main>
 }

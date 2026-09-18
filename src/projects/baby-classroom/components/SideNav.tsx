@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-const links = [['overview', 'OVERVIEW'], ['goals', 'GOALS'], ['experience', 'EXPERIENCE'], ['motion', 'MOTION'], ['system', 'SYSTEM'], ['demo', 'DEMO']]
+const links = [['overview', 'OVERVIEW'], ['goals', 'GOALS'], ['system', 'SYSTEM'], ['experience', 'EXPERIENCE'], ['motion', 'MOTION'], ['demo', 'DEMO']]
 
 export default function SideNav() {
   const [active, setActive] = useState('overview'); const [progress, setProgress] = useState(0)
